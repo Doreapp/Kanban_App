@@ -4,7 +4,9 @@
               android:orientation="vertical"
               android:background="@drawable/inset_task"
               android:layout_width="match_parent"
-              android:padding="5dp"
+              android:padding="15dp"
+              android:elevation="3dp"
+              android:layout_margin="3dp"
               android:layout_height="wrap_content">
 
 
@@ -14,6 +16,7 @@
               android:id="@+id/etTitle"
               android:text="Title"
               android:textSize="14sp"
+              android:background="@null"
               android:lines="1"
               android:maxLength="125"
               android:textColor="@android:color/black" android:inputType="text" android:singleLine="true"/>
@@ -22,9 +25,11 @@
               android:layout_height="wrap_content"
               android:textColor="@android:color/darker_gray"
               android:id="@+id/etDescription"
+              android:background="@null"
+              android:layout_marginTop="5dp"
               android:textSize="12sp"
               android:enabled="false"
-              android:text="des rtghreu hfsifsiu hzurfj brf"
+              android:text="des rtghreu hgerhg r fhdsh hrfg hdgrhfh jfgquhh gbfjfgv hgg tegfh rd fsifsiu hzurfj brf"
               android:maxLength="500" android:inputType="textMultiLine"/>
 
     <LinearLayout android:layout_width="match_parent"

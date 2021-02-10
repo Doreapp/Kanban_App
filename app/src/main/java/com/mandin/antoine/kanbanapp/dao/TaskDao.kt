@@ -9,7 +9,10 @@ interface TaskDao {
 
     @Transaction
     @Query("SELECT * FROM Task")
-    fun getPlaylistsWithSongs(): List<TaskWithLabels>
+    fun getTaskWithLabels(): List<TaskWithLabels>
+
+    @Query("SELECT MAX(taskId) FROM Task")
+    fun getMaxTaskId(): Int
 
     @Insert
     fun insertTasks(vararg tasks: Task)

@@ -11,7 +11,36 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/horizontalScrollView"
-            android:padding="10dp">
+            >
+
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="match_parent"
+                      android:padding="10dp"
+                      android:orientation="horizontal">
+
+            <com.mandin.antoine.kanbanapp.views.PanelView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/panelList"
+                    app:title="List"/>
+
+            <com.mandin.antoine.kanbanapp.views.PanelView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/panelToDo"
+                    app:title="To Do"/>
+
+            <com.mandin.antoine.kanbanapp.views.PanelView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/panelDoing"
+                    app:title="Doing"/>
+
+            <com.mandin.antoine.kanbanapp.views.PanelView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/panelDone"
+                    app:title="Done"/>
+        </LinearLayout>
     </HorizontalScrollView>
 
 </RelativeLayout>
