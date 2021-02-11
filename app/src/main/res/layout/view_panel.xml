@@ -2,20 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
-              android:layout_width="200dp"
+              android:layout_width="300dp"
               android:layout_marginHorizontal="5dp"
               android:background="@drawable/inset_panel"
               android:layout_height="match_parent">
 
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="title"
-              android:layout_margin="10dp"
-              android:textStyle="bold"
-              android:gravity="center"
-              android:textSize="20sp"
-              android:textColor="@android:color/black"
-              android:id="@+id/tvTitle"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="5dp">
+        <TextView android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:layout_height="wrap_content"
+                  android:text="title"
+                  android:textStyle="bold"
+                  android:textSize="20sp"
+                  android:textColor="@android:color/black"
+                  android:id="@+id/tvTitle"/>
+
+        <ImageView android:layout_width="32dp"
+                   android:layout_height="32dp"
+                   android:padding="4dp"
+                   android:id="@+id/btnAdd"
+                   app:srcCompat="@drawable/ic_add"/>
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

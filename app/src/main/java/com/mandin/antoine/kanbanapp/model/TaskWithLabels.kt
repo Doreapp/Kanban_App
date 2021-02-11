@@ -11,6 +11,6 @@ data class TaskWithLabels(
         entityColumn = "labelId",
         associateBy = Junction(TaskLabelRelation::class)
     )
-    val labels: List<Label>
+    var labels: List<Label>
 )
 

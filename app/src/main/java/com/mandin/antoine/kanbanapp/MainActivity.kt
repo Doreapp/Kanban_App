@@ -3,8 +3,7 @@ package com.mandin.antoine.kanbanapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.room.Room
-import com.mandin.antoine.kanbanapp.dao.AppDatabase
+import com.mandin.antoine.kanbanapp.dao.Service
 import com.mandin.antoine.kanbanapp.model.Task
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 import com.mandin.antoine.kanbanapp.utils.Constants
@@ -25,7 +24,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val tasks = testSetOfTasks()//loadTasks()
+        //Service(this).clear()
+
+        val tasks = loadTasks()
         displayTasks(tasks)
     }
 
@@ -53,12 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun loadTasks(): List<TaskWithLabels> {
-        val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, Constants.DATABASE_NAME
-        ).build()
-        val taskDao = db.taskDao()
-        return taskDao.getTaskWithLabels()
+        return Service(this).getAllTasksWithLabels()
     }
 
     fun displayTasks(tasks: List<TaskWithLabels>) {

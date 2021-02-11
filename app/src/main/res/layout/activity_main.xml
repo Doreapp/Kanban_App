@@ -21,24 +21,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/panelList"
+                    app:index="0"
                     app:title="List"/>
 
             <com.mandin.antoine.kanbanapp.views.PanelView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/panelToDo"
+                    app:index="1"
                     app:title="To Do"/>
 
             <com.mandin.antoine.kanbanapp.views.PanelView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/panelDoing"
+                    app:index="2"
                     app:title="Doing"/>
 
             <com.mandin.antoine.kanbanapp.views.PanelView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/panelDone"
+                    app:index="3"
                     app:title="Done"/>
         </LinearLayout>
     </HorizontalScrollView>

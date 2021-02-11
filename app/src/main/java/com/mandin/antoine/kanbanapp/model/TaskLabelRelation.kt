@@ -4,6 +4,6 @@ import androidx.room.Entity
 
 @Entity(primaryKeys = ["taskId", "labelId"])
 data class TaskLabelRelation(
-    val taskId: Long,
-    val labelId: Long
+    val taskId: Int,
+    val labelId: Int
 )
