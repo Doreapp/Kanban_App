@@ -1,40 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
+              android:orientation="horizontal"
               android:background="@drawable/inset_task"
               android:layout_width="match_parent"
-              android:padding="15dp"
+              android:padding="5dp"
               android:elevation="3dp"
+              android:minHeight="98dp"
               android:layout_margin="3dp"
               android:layout_height="wrap_content">
 
+    <LinearLayout android:layout_width="0dp"
+                  android:padding="10dp"
+                  android:layout_weight="1"
+                  android:orientation="vertical"
+                  android:layout_height="wrap_content">
 
-    <EditText android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:enabled="false"
-              android:id="@+id/etTitle"
-              android:text="Title"
-              android:textSize="14sp"
-              android:background="@null"
-              android:lines="1"
-              android:maxLength="125"
-              android:textColor="@android:color/black" android:inputType="text" android:singleLine="true"/>
-
-    <EditText android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textColor="@android:color/darker_gray"
-              android:id="@+id/etDescription"
-              android:background="@null"
-              android:layout_marginTop="5dp"
-              android:textSize="12sp"
-              android:enabled="false"
-              android:text="des rtghreu hgerhg r fhdsh hrfg hdgrhfh jfgquhh gbfjfgv hgg tegfh rd fsifsiu hzurfj brf"
-              android:maxLength="500" android:inputType="textMultiLine"/>
-
-    <LinearLayout android:layout_width="match_parent"
+        <EditText android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:id="@+id/layoutLabels"
-                  android:orientation="horizontal"/>
+                  android:enabled="false"
+                  android:id="@+id/etTitle"
+                  android:text=""
+                  android:textSize="14sp"
+                  android:background="@null"
+                  android:lines="1"
+                  android:hint="Title"
+                  android:maxLength="125"
+                  android:textColor="@android:color/black" android:inputType="text" android:singleLine="true"/>
+
+        <EditText android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/strongGray"
+                  android:id="@+id/etDescription"
+                  android:background="@null"
+                  android:hint="Description"
+                  android:layout_marginTop="5dp"
+                  android:textSize="12sp"
+                  android:enabled="false"
+                  android:text=""
+                  android:maxLength="500"
+                  android:inputType="textMultiLine"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/layoutLabels"
+                      android:orientation="horizontal"/>
+
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:visibility="gone"
+                      android:id="@+id/layoutButtons"
+                      android:orientation="horizontal">
+            <Button android:layout_width="0dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="2dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:id="@+id/btnCancel" style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+            <Button android:layout_width="0dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="2dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:id="@+id/btnSave" style="@style/Widget.AppCompat.Button.Colored"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+            android:gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <ImageView android:layout_width="28dp"
+                   android:layout_height="28dp"
+                   android:padding="4dp"
+                   app:srcCompat="@drawable/ic_edit"
+                   android:id="@+id/btnEdit"
+                   app:tint="@drawable/selector_colors_clickable"/>
+        <ImageView android:layout_width="28dp"
+                   android:layout_height="28dp"
+                   android:padding="4dp"
+                   app:srcCompat="@drawable/ic_delete"
+                   android:id="@+id/btnDelete"
+                   android:visibility="gone"
+                   app:tint="@drawable/selector_colors_clickable"/>
+
+        <View android:layout_width="0dp" android:layout_height="0dp"
+              android:layout_weight="1"/>
+
+
+        <ImageView android:layout_width="32dp"
+                   android:layout_height="32dp"
+                   android:padding="4dp"
+                   app:tint="@drawable/selector_colors_clickable"
+                   app:srcCompat="@drawable/ic_reorder"
+                   android:id="@+id/btnReorder"/>
+
+        <View android:layout_width="0dp" android:layout_height="0dp"
+              android:layout_weight="1"/>
+
+
+        <ImageView android:layout_width="32dp"
+                   android:layout_height="32dp"
+                   android:padding="4dp"
+                   app:tint="@drawable/selector_colors_clickable"
+                   app:srcCompat="@drawable/ic_move_horizontally"
+                   android:id="@+id/btnMoveHorizontally"/>
+    </LinearLayout>
 
 </LinearLayout>
