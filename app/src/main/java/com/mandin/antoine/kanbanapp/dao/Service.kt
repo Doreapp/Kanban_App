@@ -110,6 +110,9 @@ class Service(
         future.get()
     }
 
+    fun close(){
+        database.close()
+    }
 
     // TODOS
     /*

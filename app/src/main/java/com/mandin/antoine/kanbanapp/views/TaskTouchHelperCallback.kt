@@ -10,8 +10,8 @@ class TaskTouchHelperCallback(
     private val panelIndex: Int
 ) : ItemTouchHelper.Callback() {
 
-    private fun log(str:String){
-        Log.i("TaskTouchHelperCallback",str)
+    private fun log(str: String) {
+        Log.i("TaskTouchHelperCallback", str)
     }
 
     override fun isItemViewSwipeEnabled(): Boolean {
@@ -24,7 +24,7 @@ class TaskTouchHelperCallback(
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-        val swipeFlags = when(panelIndex) {
+        val swipeFlags = when (panelIndex) {
             Constants.Panels.LIST -> ItemTouchHelper.END
             Constants.Panels.DONE -> ItemTouchHelper.START
             else -> ItemTouchHelper.END or ItemTouchHelper.START
@@ -39,36 +39,36 @@ class TaskTouchHelperCallback(
         target: RecyclerView.ViewHolder
     ): Boolean {
         log("onMove")
-        if(viewHolder is ItemTouchHelperViewHolder)
+        if (viewHolder is ItemTouchHelperViewHolder)
             viewHolder.onItemClear()
-        adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
+        adapter.onItemMove(viewHolder as TaskViewHolder, target.adapterPosition)
         return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         log("onSwiped")
-        if(viewHolder is ItemTouchHelperViewHolder)
+        if (viewHolder is ItemTouchHelperViewHolder)
             viewHolder.onItemClear()
-        adapter.onItemSwiped(viewHolder.adapterPosition, direction)
+        adapter.onItemSwiped(viewHolder as TaskViewHolder, direction)
     }
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-        if(viewHolder != null && viewHolder is ItemTouchHelperViewHolder)
+        if (viewHolder != null && viewHolder is ItemTouchHelperViewHolder)
             viewHolder.onItemSelected()
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
-        if(viewHolder is ItemTouchHelperViewHolder)
+        if (viewHolder is ItemTouchHelperViewHolder)
             viewHolder.onItemClear()
     }
 
-    interface ItemTouchHelperAdapter {
-        fun onItemMove(fromPosition: Int, toPosition: Int): Boolean
+    interface TaskTouchHelperAdapter {
+        fun onItemMove(viewHolder: TaskViewHolder, toPosition: Int): Boolean
 
-        fun onItemDismiss(position: Int)
+        fun onItemDismiss(viewHolder: TaskViewHolder)
 
-        fun onItemSwiped(position: Int, direction: Int)
+        fun onItemSwiped(viewHolder: TaskViewHolder, direction: Int)
     }
 
     interface ItemTouchHelperViewHolder {
