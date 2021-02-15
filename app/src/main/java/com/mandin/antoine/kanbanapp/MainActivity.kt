@@ -7,10 +7,11 @@ import com.mandin.antoine.kanbanapp.dao.Service
 import com.mandin.antoine.kanbanapp.model.Task
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 import com.mandin.antoine.kanbanapp.utils.Constants
+import com.mandin.antoine.kanbanapp.views.PanelView
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(), PanelView.PanelManager {
+    lateinit var service: Service
 
     private fun log(str: String) {
         Log.i("MainActivity", str)
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //Service(this).clear()
+        service = Service(this)
 
         val tasks = loadTasks()
         displayTasks(tasks)
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun loadTasks(): List<TaskWithLabels> {
-        return Service(this).getAllTasksWithLabels()
+        return service.getAllTasksWithLabels()
     }
 
     fun displayTasks(tasks: List<TaskWithLabels>) {
@@ -74,5 +75,18 @@ class MainActivity : AppCompatActivity() {
         panelToDo.tasks = panelTasks[Constants.Panels.TODO]!!
         panelDoing.tasks = panelTasks[Constants.Panels.DOING]!!
         panelDone.tasks = panelTasks[Constants.Panels.DONE]!!
+        panelList.panelManager = this
+        panelToDo.panelManager = this
+        panelDoing.panelManager = this
+        panelDone.panelManager = this
+    }
+
+    override fun moveTaskToPanel(task: TaskWithLabels, panelIndex: Int) {
+        when(panelIndex){
+            Constants.Panels.LIST -> panelList.insertOnTop(task)
+            Constants.Panels.TODO -> panelToDo.insertOnTop(task)
+            Constants.Panels.DOING -> panelDoing.insertOnTop(task)
+            Constants.Panels.DONE -> panelDone.insertOnTop(task)
+        }
     }
 }

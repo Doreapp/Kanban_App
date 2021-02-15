@@ -25,25 +25,31 @@ class Service(
     private val labelDao = database.labelDao()
 
     fun updateTaskWithLabels(taskWithLabels: TaskWithLabels) {
-        taskDao.updateTasks(taskWithLabels.task)
+        val callable: Callable<Void> = Callable<Void> {
+            taskDao.updateTasks(taskWithLabels.task)
 
-        val oldLabels = taskDao.getTaskLabelRelationsForTask(taskWithLabels.task.taskId)
-        val currentLabels = ArrayList<TaskLabelRelation>()
-        for (label in taskWithLabels.labels)
-            currentLabels.add(
-                TaskLabelRelation(
-                    taskWithLabels.task.taskId,
-                    label.labelId
+            val oldLabels = taskDao.getTaskLabelRelationsForTask(taskWithLabels.task.taskId)
+            val currentLabels = ArrayList<TaskLabelRelation>()
+            for (label in taskWithLabels.labels)
+                currentLabels.add(
+                    TaskLabelRelation(
+                        taskWithLabels.task.taskId,
+                        label.labelId
+                    )
                 )
-            )
 
-        val toRemove = ArrayList<TaskLabelRelation>(oldLabels)
-        toRemove.removeAll(currentLabels)
-        val toAdd = ArrayList<TaskLabelRelation>(currentLabels)
-        toAdd.removeAll(oldLabels)
+            val toRemove = ArrayList<TaskLabelRelation>(oldLabels)
+            toRemove.removeAll(currentLabels)
+            val toAdd = ArrayList<TaskLabelRelation>(currentLabels)
+            toAdd.removeAll(oldLabels)
 
-        taskDao.deleteTaskLabelRelations(toRemove)
-        taskDao.insertTaskLabelRelations(toAdd)
+            taskDao.deleteTaskLabelRelations(toRemove)
+            taskDao.insertTaskLabelRelations(toAdd)
+
+            null
+        }
+        val future: Future<Void> = Executors.newSingleThreadExecutor().submit(callable)
+        future.get()
     }
 
     fun getAllTasksWithLabels(): List<TaskWithLabels> {
@@ -54,6 +60,20 @@ class Service(
         val future: Future<List<TaskWithLabels>> = Executors.newSingleThreadExecutor().submit(callable)
 
         return future.get()
+    }
+
+    fun deleteTaskWithLabels(taskWithLabels: TaskWithLabels){
+        val callable: Callable<Void> = Callable<Void> {
+            val relations = ArrayList<TaskLabelRelation>()
+            for(label in taskWithLabels.labels)
+                relations.add(TaskLabelRelation(taskWithLabels.task.taskId, label.labelId))
+            taskDao.deleteTaskLabelRelations(relations)
+            taskDao.deleteTask(taskWithLabels.task)
+
+            null
+        }
+        val future: Future<Void> = Executors.newSingleThreadExecutor().submit(callable)
+        future.get()
     }
 
     fun insertTaskWithLabels(task: Task, labels: List<Label>): TaskWithLabels {

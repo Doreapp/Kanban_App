@@ -20,7 +20,7 @@
                   android:layout_height="wrap_content"
                   android:enabled="false"
                   android:id="@+id/etTitle"
-                  android:text="Title"
+                  android:text=""
                   android:textSize="14sp"
                   android:background="@null"
                   android:lines="1"
@@ -37,7 +37,7 @@
                   android:layout_marginTop="5dp"
                   android:textSize="12sp"
                   android:enabled="false"
-                  android:text="des rtghreu hgerhg r fhdsh hrfg hdgrhfh jfgquhh gbfjfgv hgg tegfh rd fsifsiu hzurfj brf"
+                  android:text=""
                   android:maxLength="500"
                   android:inputType="textMultiLine"/>
 
@@ -103,24 +103,13 @@
         <View android:layout_width="0dp" android:layout_height="0dp"
               android:layout_weight="1"/>
 
-        <LinearLayout android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:orientation="horizontal">
 
-            <ImageView android:layout_width="28dp"
-                       android:layout_height="28dp"
-                       app:tint="@drawable/selector_colors_clickable"
-                       android:padding="4dp"
-                       app:srcCompat="@drawable/ic_arrow_left"
-                       android:id="@+id/btnMoveLeft"/>
-
-            <ImageView android:layout_width="28dp"
-                       android:layout_height="28dp"
-                       app:tint="@drawable/selector_colors_clickable"
-                       android:padding="4dp"
-                       app:srcCompat="@drawable/ic_arrow_right"
-                       android:id="@+id/btnMoveRight"/>
-        </LinearLayout>
+        <ImageView android:layout_width="32dp"
+                   android:layout_height="32dp"
+                   android:padding="4dp"
+                   app:tint="@drawable/selector_colors_clickable"
+                   app:srcCompat="@drawable/ic_move_horizontally"
+                   android:id="@+id/btnMoveHorizontally"/>
     </LinearLayout>
 
 </LinearLayout>
