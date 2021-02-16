@@ -31,6 +31,11 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
         displayTasks(tasks)
     }
 
+    override fun onDestroy() {
+        service.close()
+        super.onDestroy()
+    }
+
     private fun testSetOfTasks(): List<TaskWithLabels> {
         val result = ArrayList<TaskWithLabels>()
         result.add(

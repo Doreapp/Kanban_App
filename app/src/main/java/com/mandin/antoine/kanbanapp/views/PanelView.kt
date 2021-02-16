@@ -48,7 +48,7 @@ class PanelView(context: Context, attrs: AttributeSet) :
         }
 
         btnAdd.setOnClickListener {
-            adapter.addNewTask()
+            displayNewTask()
         }
     }
 
@@ -109,6 +109,11 @@ class PanelView(context: Context, attrs: AttributeSet) :
             return true
         }
         return false
+    }
+
+    fun displayNewTask(){
+        adapter.addNewTask()
+        recyclerView.layoutManager?.scrollToPosition(0)
     }
 
     fun insertOnTop(task: TaskWithLabels) {
