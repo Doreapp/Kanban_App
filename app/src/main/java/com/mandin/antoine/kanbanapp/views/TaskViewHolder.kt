@@ -1,11 +1,21 @@
 package com.mandin.antoine.kanbanapp.views
 
+import android.content.Context
+import android.os.Bundle
+import android.os.Handler
+import android.os.ResultReceiver
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 import kotlinx.android.synthetic.main.view_task.view.*
+import androidx.core.content.ContextCompat.getSystemService
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 /**
  * View holder of a [TaskWithLabels]
@@ -38,6 +48,8 @@ class TaskViewHolder(
                 itemView.btnEdit.visibility = View.GONE
                 itemView.btnMoveHorizontally.visibility = View.GONE
                 itemView.btnReorder.visibility = View.GONE
+                // Focus the edittext
+                focusTitleEditText()
             } else {
                 // Hide buttons of save/cancel modifications + delete button
                 itemView.layoutButtons.visibility = View.GONE
@@ -91,6 +103,7 @@ class TaskViewHolder(
      */
     fun cancel() {
         log("cancel(). Editing=$editing")
+        unFocusEditText()
         taskViewHolderObserver.cancelTaskEdition(this)
     }
 
@@ -101,6 +114,7 @@ class TaskViewHolder(
      */
     fun save() {
         log("save(). Editing=$editing")
+        unFocusEditText()
         taskViewHolderObserver.saveTaskEdition(
             this,
             itemView.etTitle.text.toString(),
@@ -115,6 +129,7 @@ class TaskViewHolder(
      */
     fun remove() {
         log("remove(). Editing=$editing")
+        unFocusEditText()
         taskViewHolderObserver.removeTask(this)
     }
 
@@ -151,7 +166,7 @@ class TaskViewHolder(
      * If [newTask] is null, then the view holder represent a new task, not persisted in the database yet
      */
     fun update(newTask: TaskWithLabels?) {
-        if(newTask == task) {
+        if (newTask == task) {
             log("update() position=$adapterPosition, task stays the same")
             return
         }
@@ -170,7 +185,6 @@ class TaskViewHolder(
             itemView.etTitle.setText("")
             itemView.etDescription.visibility = View.VISIBLE
             itemView.etDescription.setText("")
-            editing = true
         }
 
         // TODO labels
@@ -190,5 +204,32 @@ class TaskViewHolder(
         log("onItemClear (position=$adapterPosition)")
         //itemView.isSelected = false
         //itemView.btnReorder.isPressed = false
+    }
+
+    private fun focusTitleEditText() {
+        log("focusTitleEditText()")
+        itemView.etTitle.requestFocus()
+        itemView.etTitle.isFocusableInTouchMode = true
+        Timer("Focus", false).schedule(object : TimerTask() {
+            override fun run() {
+                val imm = itemView.context.getSystemService(
+                    Context.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
+                imm.showSoftInput(
+                    itemView.etTitle,
+                    InputMethodManager.SHOW_IMPLICIT
+                )
+                log("focusTitleEditText() : imm=$imm")
+            }
+        }, 100L)
+    }
+
+    private fun unFocusEditText() {
+        log("unFocusEditText()")
+        val imm = itemView.context.getSystemService(
+            Context.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
+        imm.hideSoftInputFromWindow(itemView.etTitle.windowToken, 0)
+        //imm.hideSoftInputFromWindow(itemView.etDescription.windowToken,0)
     }
 }

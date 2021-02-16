@@ -76,6 +76,7 @@ class TaskAdapter
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         if (newOne && position == 0) {
             holder.update(null)
+            holder.editing = true
         } else {
             holder.update(tasks[position + if (newOne) -1 else 0])
             holder.editing = position == editingItem
@@ -146,10 +147,13 @@ class TaskAdapter
         startDragListener.onStartDrag(taskViewHolder)
     }
 
-
     override fun startEditingTask(taskViewHolder: TaskViewHolder) {
         log("startEditingTask taskViewHolder=$taskViewHolder")
         val position = taskViewHolder.adapterPosition
+        if(editingItem != -1){
+            log("startEditingTask : try to edit a 2nd task, abort")
+            return
+        }
         editingItem = position
         notifyItemChanged(position)
     }
