@@ -1,14 +1,18 @@
 package com.mandin.antoine.kanbanapp
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import com.mandin.antoine.kanbanapp.dao.Service
 import com.mandin.antoine.kanbanapp.model.Task
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 import com.mandin.antoine.kanbanapp.utils.Constants
 import com.mandin.antoine.kanbanapp.views.PanelView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.view_task.view.*
 
 class MainActivity : AppCompatActivity(), PanelView.PanelManager {
     lateinit var service: Service
@@ -26,6 +30,10 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
         setContentView(R.layout.activity_main)
 
         service = Service(this)
+
+        //Hide the keyboard usually opening on app begin
+        window.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         val tasks = loadTasks()
         displayTasks(tasks)
