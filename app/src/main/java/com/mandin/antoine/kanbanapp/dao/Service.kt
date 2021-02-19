@@ -24,6 +24,15 @@ class Service(
     private val taskDao = database.taskDao()
     private val labelDao = database.labelDao()
 
+    fun updateTasks(vararg task: Task){
+        val callable: Callable<Void> = Callable<Void> {
+            taskDao.updateTasks(*task)
+            null
+        }
+        val future: Future<Void> = Executors.newSingleThreadExecutor().submit(callable)
+        future.get()
+    }
+
     fun updateTaskWithLabels(taskWithLabels: TaskWithLabels) {
         val callable: Callable<Void> = Callable<Void> {
             taskDao.updateTasks(taskWithLabels.task)

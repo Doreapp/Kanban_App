@@ -16,9 +16,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.log
 
-// TODO Delete doesn't work
-// TODO bug quand edit le 2e met en édition le premier
-// TODO Focus l'edit text au start de l'ajout ou de la modif + scroll to it
 class PanelView(context: Context, attrs: AttributeSet) :
     LinearLayout(context, attrs), TaskAdapter.ModificationSaver,
     TaskTouchHelperCallback.OnStartDragListener {
@@ -69,6 +66,11 @@ class PanelView(context: Context, attrs: AttributeSet) :
             itemTouchHelper!!.attachToRecyclerView(recyclerView)
             recyclerView.adapter = adapter
         }
+
+    override fun saveTasksUpdate(vararg task: Task) {
+        service.updateTasks(*task)
+    }
+
 
     override fun saveTaskChanges(task: TaskWithLabels) {
         service.updateTaskWithLabels(task)

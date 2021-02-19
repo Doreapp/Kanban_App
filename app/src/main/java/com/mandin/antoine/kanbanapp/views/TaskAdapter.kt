@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.R
 import com.mandin.antoine.kanbanapp.model.Label
+import com.mandin.antoine.kanbanapp.model.Task
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 
 /**
@@ -38,8 +39,8 @@ class TaskAdapter
     }
 
     init {
-        tasks.sortedBy {
-            -it.task.priority
+        tasks.sortByDescending {
+            it.task.priority
         }
     }
 
@@ -95,23 +96,32 @@ class TaskAdapter
         val toItem = tasks[toPosition + offset]
         movedItem.task.priority = toItem.task.priority
 
+        val updatedTask = ArrayList<Task>()
         log("onItemMove, before list edit: tasks=$tasks")
         if (fromPosition < toPosition) {
             for (i in fromPosition+1..toPosition) {
                 tasks[i].task.priority++
+                updatedTask.add(tasks[i].task)
             }
             tasks.removeAt(fromPosition + offset)
             tasks.add(toPosition + offset, movedItem)
         } else {
             for (i in toPosition until fromPosition) {
                 tasks[i].task.priority--
+                updatedTask.add(tasks[i].task)
             }
             tasks.removeAt(fromPosition + offset)
             tasks.add(toPosition + offset, movedItem)
         }
+        updatedTask.add(movedItem.task)
         log("onItemMove, after list edit: tasks=$tasks")
 
         notifyItemMoved(fromPosition, toPosition)
+
+        val updatedTaskArray = Array(updatedTask.size) {
+            i -> updatedTask[i]
+        }
+        modificationSaver.saveTasksUpdate(*updatedTaskArray)
 
         return true
     }
@@ -143,6 +153,11 @@ class TaskAdapter
 
     override fun startReorderingTask(taskViewHolder: TaskViewHolder) {
         log("startReorderingTask taskViewHolder=$taskViewHolder")
+        if(editingItem >= 0){
+            // We are editing --> Prevent from reordering
+            log("startReorderingTask while editing an item --> abort")
+            return
+        }
         taskViewHolder.onItemSelected()
         startDragListener.onStartDrag(taskViewHolder)
     }
@@ -236,6 +251,7 @@ class TaskAdapter
     }
 
     interface ModificationSaver {
+        fun saveTasksUpdate(vararg task: Task)
         fun saveTaskChanges(task: TaskWithLabels)
         fun createNewTask(title: String, description: String, labels: List<Label>, priority: Int = 0): TaskWithLabels
         fun deleteTask(task: TaskWithLabels)

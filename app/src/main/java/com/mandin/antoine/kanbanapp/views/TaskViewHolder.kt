@@ -43,7 +43,8 @@ class TaskViewHolder(
                 // Show description edit (even if empty) + buttons of save/cancel modifications + delete button
                 itemView.etDescription.visibility = View.VISIBLE
                 itemView.layoutButtons.visibility = View.VISIBLE
-                itemView.btnDelete.visibility = View.VISIBLE
+                // If creating : cannot delete
+                itemView.btnDelete.visibility = if(task === null) View.GONE else View.VISIBLE
                 // Hide `edit`, `move horizontally` and `ReOrder` buttons
                 itemView.btnEdit.visibility = View.GONE
                 itemView.btnMoveHorizontally.visibility = View.GONE
