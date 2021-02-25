@@ -1,18 +1,13 @@
 package com.mandin.antoine.kanbanapp.views
 
 import android.content.Context
-import android.os.Bundle
-import android.os.Handler
-import android.os.ResultReceiver
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 import kotlinx.android.synthetic.main.view_task.view.*
-import androidx.core.content.ContextCompat.getSystemService
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -95,6 +90,7 @@ class TaskViewHolder(
             }
             false
         }
+
     }
 
     /**
