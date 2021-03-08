@@ -5,17 +5,19 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.R
 import com.mandin.antoine.kanbanapp.dao.Service
 import com.mandin.antoine.kanbanapp.model.Label
 import com.mandin.antoine.kanbanapp.model.Task
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 import com.mandin.antoine.kanbanapp.utils.Constants
-import kotlinx.android.synthetic.main.view_panel.view.*
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.views.adapters.TaskAdapter
 import com.mandin.antoine.kanbanapp.views.view_holders.TaskTouchHelperCallback
+import kotlinx.android.synthetic.main.view_panel.view.*
+import kotlinx.coroutines.runBlocking
+import java.util.concurrent.Executors
 
 // TODO Delete doesn't work
 // TODO bug quand edit le 2e met en édition le premier
@@ -23,13 +25,14 @@ import com.mandin.antoine.kanbanapp.views.view_holders.TaskTouchHelperCallback
 class PanelView(context: Context, attrs: AttributeSet) :
     LinearLayout(context, attrs), TaskAdapter.ModificationSaver,
     TaskTouchHelperCallback.OnStartDragListener {
+
     private lateinit var adapter: TaskAdapter
     private val service = Service(context)
     private val index: Int
     var panelManager: PanelManager? = null
 
-    private fun log(str:String){
-        Log.i("PanelView",str)
+    private fun log(str: String) {
+        Log.i("PanelView", str)
     }
 
     init {
@@ -63,7 +66,7 @@ class PanelView(context: Context, attrs: AttributeSet) :
 
     private var tasks: ArrayList<TaskWithLabels> = ArrayList()
 
-    fun setValues(tasks:List<TaskWithLabels>, labels:List<Label>){
+    fun setValues(tasks: List<TaskWithLabels>, labels: List<Label>) {
         this.tasks = ArrayList(tasks)
         adapter = TaskAdapter(this.tasks, this, this, labels)
         val callback: ItemTouchHelper.Callback = TaskTouchHelperCallback(adapter, index)
@@ -72,11 +75,15 @@ class PanelView(context: Context, attrs: AttributeSet) :
         recyclerView.adapter = adapter
     }
 
-    override fun saveTaskChanges(task: TaskWithLabels) {
+    override fun saveTaskChanges(task: TaskWithLabels) = runBlocking {
         service.updateTaskWithLabels(task)
     }
 
-    override fun createNewTask(title: String, description: String, labels: List<Label>, priority: Int): TaskWithLabels {
+
+    override fun createNewTask(
+        title: String, description: String,
+        labels: List<Label>, priority: Int
+    ): TaskWithLabels = runBlocking {
         val taskToAdd = Task(
             title = title,
             description = description,
@@ -84,10 +91,10 @@ class PanelView(context: Context, attrs: AttributeSet) :
             priority = priority
         )
 
-        return service.insertTaskWithLabels(taskToAdd, labels)
+        service.insertTaskWithLabels(taskToAdd, labels)
     }
 
-    override fun deleteTask(task: TaskWithLabels) {
+    override fun deleteTask(task: TaskWithLabels) = runBlocking {
         service.deleteTaskWithLabels(task)
     }
 
@@ -113,12 +120,12 @@ class PanelView(context: Context, attrs: AttributeSet) :
         return false
     }
 
-    fun displayNewTask(){
+    fun displayNewTask() {
         adapter.addNewTask()
         recyclerView.layoutManager?.scrollToPosition(0)
     }
 
-    fun insertOnTop(task: TaskWithLabels) {
+    fun insertOnTop(task: TaskWithLabels) = runBlocking {
         task.task.panel = index
         adapter.insertOnTop(task)
         service.updateTaskWithLabels(task)

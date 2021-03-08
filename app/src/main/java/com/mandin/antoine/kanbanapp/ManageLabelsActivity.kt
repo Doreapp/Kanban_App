@@ -8,6 +8,8 @@ import com.mandin.antoine.kanbanapp.dao.Service
 import com.mandin.antoine.kanbanapp.model.Label
 import com.mandin.antoine.kanbanapp.views.adapters.LabelAdapter
 import kotlinx.android.synthetic.main.activity_manage_labels.*
+import kotlinx.coroutines.runBlocking
+import java.util.concurrent.Executors
 
 /**
  * Activity used to manage labels.
@@ -16,7 +18,7 @@ class ManageLabelsActivity :
     AppCompatActivity(), LabelAdapter.ModificationSaver {
     lateinit var service: Service
 
-    private var adapter: LabelAdapter?=null
+    private var adapter: LabelAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +28,12 @@ class ManageLabelsActivity :
 
         service = Service(this)
 
-        val labels = loadLabels()
-        displayLabels(labels)
+        Executors.newSingleThreadExecutor().submit {
+            runBlocking {
+                val labels = loadLabels()
+                runOnUiThread { displayLabels(labels) }
+            }
+        }
 
         initToolBar()
     }
@@ -36,7 +42,7 @@ class ManageLabelsActivity :
      * Called when an item of the toolbar is pressed
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             android.R.id.home -> {
                 // Back arrow pressed
                 onBackPressed()
@@ -60,7 +66,7 @@ class ManageLabelsActivity :
     /**
      * Init the toolbar, and the back arrow on it
      */
-    private fun initToolBar(){
+    private fun initToolBar() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setDisplayShowHomeEnabled(true);
@@ -69,34 +75,34 @@ class ManageLabelsActivity :
     /**
      * Add a new label and start editing it
      */
-    fun addLabel(){
+    fun addLabel() {
         adapter?.addNewLabel()
     }
 
     /**
      * Load every labels
      */
-    fun loadLabels() : ArrayList<Label> {
+    suspend fun loadLabels(): ArrayList<Label> {
         return ArrayList(service.getAllLabels())
     }
 
     /**
      * Displays [labels] using the recycler view and [LabelAdapter]
      */
-    fun displayLabels(labels:ArrayList<Label>) {
+    fun displayLabels(labels: ArrayList<Label>) {
         adapter = LabelAdapter(labels, this)
         recyclerView.adapter = adapter
     }
 
-    override fun saveLabelChanges(label: Label) {
+    override fun saveLabelChanges(label: Label) = runBlocking {
         service.updateLabel(label)
     }
 
-    override fun createNewLabel(title: String, color: Int): Label {
-        return service.insertLabel(Label(title = title, color = color))
+    override fun createNewLabel(title: String, color: Int): Label = runBlocking {
+        service.insertLabel(Label(title = title, color = color))
     }
 
-    override fun deleteLabel(label: Label) {
+    override fun deleteLabel(label: Label) = runBlocking {
         service.deleteLabel(label)
     }
 }

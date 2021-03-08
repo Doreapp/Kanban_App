@@ -9,20 +9,20 @@ interface LabelDao {
 
 
     @Query("SELECT MAX(labelId) FROM Label")
-    fun getMaxLabelId(): Int
+    suspend fun getMaxLabelId(): Int
 
     @Query("SELECT * FROM Label")
-    fun getAllLabels(): List<Label>
+    suspend fun getAllLabels(): List<Label>
 
     @Insert
-    fun insertLabel(vararg labels: Label)
+    suspend fun insertLabel(vararg labels: Label)
 
     @Delete
-    fun deleteLabel(label: Label)
+    suspend fun deleteLabel(label: Label)
 
     @Update
-    fun updateLabel(vararg label: Label)
+    suspend fun updateLabel(vararg label: Label)
 
     @Query("DELETE FROM TaskLabelRelation WHERE labelId = :labelId")
-    fun deleteLabelRelations(labelId: Int)
+    suspend fun deleteLabelRelations(labelId: Int)
 }

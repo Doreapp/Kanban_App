@@ -16,12 +16,14 @@ import com.mandin.antoine.kanbanapp.views.PanelView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_manage_labels.*
+import kotlinx.coroutines.runBlocking
+import java.util.concurrent.Executors
 
 // TODO retrieve labels when come back from mangeLabelsActivity, and update the display
 /**
  * Main Activity : used to manage tasks, into [PanelView]s
  *
- * TODO improvements : Info bar, showing what to do. Cancel possibility. Parallelize data access.
+ * TODO improvements : Info bar, showing what to do. Cancel possibility.
  */
 class MainActivity : AppCompatActivity(), PanelView.PanelManager {
     lateinit var service: Service
@@ -47,9 +49,7 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
             WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
 
-        val tasks = loadTasks()
-        val labels = loadLabels()
-        displayTasks(tasks, labels)
+        fetchAndDisplayData()
 
         initToolBar()
     }
@@ -88,11 +88,20 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
             REQUEST_CODE_MANAGE_LABELS -> {
-                val tasks = loadTasks()
-                val labels = loadLabels()
-                displayTasks(tasks, labels)
+                fetchAndDisplayData()
             }
         }
+    }
+
+    private fun fetchAndDisplayData(){
+        Executors.newSingleThreadExecutor().submit {
+            runBlocking {
+                val tasks = loadTasks()
+                val labels = loadLabels()
+                runOnUiThread { displayTasks(tasks, labels) }
+            }
+        }
+
     }
 
     /**
@@ -163,7 +172,7 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
     /**
      * Load [Task]s from the storage
      */
-    fun loadTasks(): List<TaskWithLabels> {
+    suspend fun loadTasks(): List<TaskWithLabels> {
         log("loadTasks")
         return service.getAllTasksWithLabels()
     }
@@ -171,7 +180,7 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
     /**
      * Load [Label] from the storage
      */
-    fun loadLabels(): List<Label> {
+    suspend fun loadLabels(): List<Label> {
         log("loadLabels")
         return ArrayList(service.getAllLabels())
     }
