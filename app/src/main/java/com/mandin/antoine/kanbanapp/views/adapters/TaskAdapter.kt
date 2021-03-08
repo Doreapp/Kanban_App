@@ -1,4 +1,4 @@
-package com.mandin.antoine.kanbanapp.views
+package com.mandin.antoine.kanbanapp.views.adapters
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.R
 import com.mandin.antoine.kanbanapp.model.Label
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
+import com.mandin.antoine.kanbanapp.views.view_holders.TaskTouchHelperCallback
+import com.mandin.antoine.kanbanapp.views.view_holders.TaskViewHolder
+import com.mandin.antoine.kanbanapp.views.view_holders.TaskViewHolderObserver
 
 /**
  * Adapter displaying task views
@@ -17,7 +20,8 @@ class TaskAdapter
     (
     private val tasks: ArrayList<TaskWithLabels>,
     private val modificationSaver: ModificationSaver,
-    private val startDragListener: TaskTouchHelperCallback.OnStartDragListener
+    private val startDragListener: TaskTouchHelperCallback.OnStartDragListener,
+    private val allLabels: List<Label>
 ) :
     RecyclerView.Adapter<TaskViewHolder>(),
     TaskTouchHelperCallback.TaskTouchHelperAdapter,
@@ -69,7 +73,7 @@ class TaskAdapter
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.view_task, parent, false)
-        return TaskViewHolder(itemView, this)
+        return TaskViewHolder(itemView, this, allLabels)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -119,7 +123,6 @@ class TaskAdapter
     override fun onItemDismiss(viewHolder: TaskViewHolder) {
         log("onItemDismiss (viewHolder=$viewHolder)")
         viewHolder.onItemClear()
-        //TODO, in function of the direction (right of left), we may move the item
     }
 
     override fun onItemSwiped(viewHolder: TaskViewHolder, direction: Int) {

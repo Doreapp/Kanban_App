@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="labelColors">
+        <item>@color/label01</item>
+        <item>@color/label02</item>
+        <item>@color/label03</item>
+        <item>@color/label04</item>
+        <item>@color/label05</item>
+        <item>@color/label06</item>
+        <item>@color/label07</item>
+        <item>@color/label08</item>
+        <item>@color/label09</item>
+        <item>@color/label10</item>
+        <item>@color/label11</item>
+        <item>@color/label12</item>
+        <item>@color/label13</item>
+        <item>@color/label14</item>
+        <item>@color/label15</item>
+        <item>@color/label16</item>
+        <item>@color/label17</item>
+        <item>@color/label18</item>
+    </array>
+</resources>

@@ -1,7 +1,6 @@
-package com.mandin.antoine.kanbanapp.views
+package com.mandin.antoine.kanbanapp.views.view_holders
 
 import com.mandin.antoine.kanbanapp.model.Label
-import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 
 
 /**

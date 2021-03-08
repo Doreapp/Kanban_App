@@ -10,6 +10,8 @@
               android:layout_margin="3dp"
               android:layout_height="wrap_content">
 
+    <!-- TODO create two xml, one for the view of a task, another for the edit and use VIEW_TYPE in recycler view -->
+
     <LinearLayout android:layout_width="0dp"
                   android:padding="10dp"
                   android:layout_weight="1"
@@ -27,7 +29,7 @@
                   android:maxLength="80"
                   android:textColor="@android:color/black"
                   android:inputType="textMultiLine"
-                 />
+        />
 
         <EditText android:layout_width="match_parent"
                   android:layout_height="wrap_content"
@@ -42,10 +44,13 @@
                   android:maxLength="160"
                   android:inputType="textMultiLine"/>
 
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:id="@+id/layoutLabels"
-                      android:orientation="horizontal"/>
+        <com.mandin.antoine.kanbanapp.views.LabelLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/layoutLabels">
+
+        </com.mandin.antoine.kanbanapp.views.LabelLayout>
 
 
         <LinearLayout android:layout_width="match_parent"

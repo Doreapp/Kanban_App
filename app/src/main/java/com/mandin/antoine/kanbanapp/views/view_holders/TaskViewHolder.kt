@@ -1,18 +1,14 @@
-package com.mandin.antoine.kanbanapp.views
+package com.mandin.antoine.kanbanapp.views.view_holders
 
 import android.content.Context
-import android.os.Bundle
-import android.os.Handler
-import android.os.ResultReceiver
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.mandin.antoine.kanbanapp.model.Label
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 import kotlinx.android.synthetic.main.view_task.view.*
-import androidx.core.content.ContextCompat.getSystemService
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -22,7 +18,8 @@ import kotlin.collections.ArrayList
  */
 class TaskViewHolder(
     itemView: View,
-    private val taskViewHolderObserver: TaskViewHolderObserver
+    private val taskViewHolderObserver: TaskViewHolderObserver,
+    allLabels: List<Label>
 ) : RecyclerView.ViewHolder(itemView),
     TaskTouchHelperCallback.ItemTouchHelperViewHolder {
     var task: TaskWithLabels? = null
@@ -39,6 +36,8 @@ class TaskViewHolder(
             itemView.etDescription.setText(task?.task?.description)
             itemView.etTitle.isEnabled = value
             itemView.etTitle.setText(task?.task?.title)
+            // Display labels
+            itemView.layoutLabels.editing = value
             if (value) {
                 // Show description edit (even if empty) + buttons of save/cancel modifications + delete button
                 itemView.etDescription.visibility = View.VISIBLE
@@ -66,6 +65,9 @@ class TaskViewHolder(
     }
 
     init {
+        // Init label layout
+        itemView.layoutLabels.labels = allLabels
+
         // On cancel edit click
         itemView.btnCancel.setOnClickListener {
             cancel()
@@ -95,6 +97,7 @@ class TaskViewHolder(
             }
             false
         }
+
     }
 
     /**
@@ -110,7 +113,6 @@ class TaskViewHolder(
     /**
      * Cancel the modifications made during edition,
      * should be call only when [editing] is true
-     * TODO -> Give labels to function, in order to save those
      */
     fun save() {
         log("save(). Editing=$editing")
@@ -119,7 +121,7 @@ class TaskViewHolder(
             this,
             itemView.etTitle.text.toString(),
             itemView.etDescription.text.toString(),
-            ArrayList()
+            itemView.layoutLabels.selectedLabels ?: ArrayList()
         )
     }
 
@@ -168,9 +170,10 @@ class TaskViewHolder(
     fun update(newTask: TaskWithLabels?) {
         if (newTask == task) {
             log("update() position=$adapterPosition, task stays the same")
-            return
+            //return
         }
         log("update() position=$adapterPosition, task become $newTask")
+
         this.task = newTask
         if (task != null) {
             itemView.etTitle.setText(task!!.task.title)
@@ -180,14 +183,16 @@ class TaskViewHolder(
             } else {
                 itemView.etDescription.visibility = View.GONE
             }
+
+            itemView.layoutLabels.selectedLabels = task!!.labels
         } else {
             // New task
             itemView.etTitle.setText("")
             itemView.etDescription.visibility = View.VISIBLE
             itemView.etDescription.setText("")
+            itemView.layoutLabels.selectedLabels = null
         }
 
-        // TODO labels
     }
 
     override fun toString(): String {

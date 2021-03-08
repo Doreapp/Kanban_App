@@ -10,26 +10,26 @@ interface TaskDao {
 
     @Transaction
     @Query("SELECT * FROM Task")
-    fun getTaskWithLabels(): List<TaskWithLabels>
+    suspend fun getTaskWithLabels(): List<TaskWithLabels>
 
     @Query("SELECT MAX(taskId) FROM Task")
-    fun getMaxTaskId(): Int
+    suspend fun getMaxTaskId(): Int
 
     @Query("SELECT * FROM TaskLabelRelation WHERE taskId=:taskId")
-    fun getTaskLabelRelationsForTask(taskId: Int) : List<TaskLabelRelation>
+    suspend fun getTaskLabelRelationsForTask(taskId: Int) : List<TaskLabelRelation>
 
     @Delete
-    fun deleteTaskLabelRelations(taskLabelRelations: List<TaskLabelRelation>)
+    suspend fun deleteTaskLabelRelations(taskLabelRelations: List<TaskLabelRelation>)
 
     @Insert
-    fun insertTaskLabelRelations(taskLabelRelations: List<TaskLabelRelation>)
+    suspend fun insertTaskLabelRelations(taskLabelRelations: List<TaskLabelRelation>)
 
     @Insert
-    fun insertTasks(vararg tasks: Task)
+    suspend fun insertTasks(vararg tasks: Task)
 
     @Delete
-    fun deleteTask(task: Task)
+    suspend fun deleteTask(task: Task)
 
     @Update
-    fun updateTasks(vararg task: Task)
+    suspend fun updateTasks(vararg task: Task)
 }
