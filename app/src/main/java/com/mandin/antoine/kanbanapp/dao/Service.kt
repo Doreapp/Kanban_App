@@ -13,7 +13,9 @@ import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
-
+/**
+ * TODO : documentation. Function to display the whole content of the DB. Parallelize methods.
+ */
 class Service(
     context: Context
 ) {
@@ -52,12 +54,31 @@ class Service(
         future.get()
     }
 
+    fun updateLabel(label: Label) {
+        val callable: Callable<Void> = Callable<Void> {
+            labelDao.updateLabel(label)
+            null
+        }
+        val future: Future<Void> = Executors.newSingleThreadExecutor().submit(callable)
+        future.get()
+    }
+
     fun getAllTasksWithLabels(): List<TaskWithLabels> {
         val callable: Callable<List<TaskWithLabels>> = Callable<List<TaskWithLabels>> {
             taskDao.getTaskWithLabels()
         }
 
         val future: Future<List<TaskWithLabels>> = Executors.newSingleThreadExecutor().submit(callable)
+
+        return future.get()
+    }
+
+    fun getAllLabels(): List<Label> {
+        val callable: Callable<List<Label>> = Callable<List<Label>> {
+            labelDao.getAllLabels()
+        }
+
+        val future: Future<List<Label>> = Executors.newSingleThreadExecutor().submit(callable)
 
         return future.get()
     }
@@ -69,6 +90,18 @@ class Service(
                 relations.add(TaskLabelRelation(taskWithLabels.task.taskId, label.labelId))
             taskDao.deleteTaskLabelRelations(relations)
             taskDao.deleteTask(taskWithLabels.task)
+
+            null
+        }
+        val future: Future<Void> = Executors.newSingleThreadExecutor().submit(callable)
+        future.get()
+    }
+
+    fun deleteLabel(label: Label){
+        val callable: Callable<Void> = Callable<Void> {
+            labelDao.deleteLabelRelations(label.labelId)
+
+            labelDao.deleteLabel(label)
 
             null
         }
@@ -95,6 +128,18 @@ class Service(
         }
 
         val future: Future<TaskWithLabels> = Executors.newSingleThreadExecutor().submit(callable)
+
+        return future.get()
+    }
+
+    fun insertLabel(label: Label): Label {
+        val callable: Callable<Label> = Callable<Label> {
+            labelDao.insertLabel(label)
+
+            label
+        }
+
+        val future: Future<Label> = Executors.newSingleThreadExecutor().submit(callable)
 
         return future.get()
     }

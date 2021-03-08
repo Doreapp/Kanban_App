@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:paddingHorizontal="10dp"
+              android:paddingVertical="4dp"
+              android:layout_height="wrap_content">
+
+    <com.mandin.antoine.kanbanapp.views.LabelView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/labelView"
+            android:text="Test Label"
+            android:layout_gravity="center_vertical|start"/>
+
+    <View android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="0dp"/>
+
+    <ImageView android:layout_width="28dp"
+               android:layout_height="28dp"
+               android:padding="4dp"
+               android:layout_gravity="center_vertical|end"
+               app:srcCompat="@drawable/ic_edit"
+               android:id="@+id/btnEdit"
+               app:tint="@drawable/selector_colors_clickable"/>
+
+
+</LinearLayout>

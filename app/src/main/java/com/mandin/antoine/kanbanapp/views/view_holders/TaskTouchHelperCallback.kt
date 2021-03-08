@@ -1,9 +1,10 @@
-package com.mandin.antoine.kanbanapp.views
+package com.mandin.antoine.kanbanapp.views.view_holders
 
 import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.utils.Constants
+import com.mandin.antoine.kanbanapp.views.adapters.TaskAdapter
 
 class TaskTouchHelperCallback(
     private val adapter: TaskAdapter,

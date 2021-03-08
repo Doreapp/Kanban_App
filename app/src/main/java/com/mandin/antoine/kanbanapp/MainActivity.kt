@@ -1,19 +1,28 @@
 package com.mandin.antoine.kanbanapp
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import com.mandin.antoine.kanbanapp.dao.Service
+import com.mandin.antoine.kanbanapp.model.Label
 import com.mandin.antoine.kanbanapp.model.Task
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 import com.mandin.antoine.kanbanapp.utils.Constants
 import com.mandin.antoine.kanbanapp.views.PanelView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.view_task.view.*
+import kotlinx.android.synthetic.main.activity_main.toolbar
+import kotlinx.android.synthetic.main.activity_manage_labels.*
 
+// TODO retrieve labels when come back from mangeLabelsActivity, and update the display
+/**
+ * Main Activity : used to manage tasks, into [PanelView]s
+ *
+ * TODO improvements : Info bar, showing what to do. Cancel possibility. Parallelize data access.
+ */
 class MainActivity : AppCompatActivity(), PanelView.PanelManager {
     lateinit var service: Service
 
@@ -29,49 +38,149 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        log("onCreate")
+
         service = Service(this)
 
         //Hide the keyboard usually opening on app begin
         window.setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
 
         val tasks = loadTasks()
-        displayTasks(tasks)
+        val labels = loadLabels()
+        displayTasks(tasks, labels)
+
+        initToolBar()
     }
 
     override fun onDestroy() {
+        log("onDestroy")
         service.close()
         super.onDestroy()
+    }
+
+    /**
+     * Called when an item of the toolbar is pressed
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        log("onOptionsItemSelected item=$item")
+        when(item.itemId){
+            R.id.item_manage_labels -> {
+                // open ManageLabelsActivity
+                manageLabels()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * Inflate the buttons on the toolbar
+     */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        log("onCreateOptionsMenu menu=$menu")
+        menuInflater.inflate(R.menu.menu_main_activity, menu)
+        return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        log("onActivityResult requestCode=$requestCode, resultCode=$requestCode, data=$data")
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            REQUEST_CODE_MANAGE_LABELS -> {
+                val tasks = loadTasks()
+                val labels = loadLabels()
+                displayTasks(tasks, labels)
+            }
+        }
+    }
+
+    /**
+     * Init the toolbar, and the back arrow on it
+     */
+    private fun initToolBar(){
+        log("initToolBar")
+        setSupportActionBar(toolbar)
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        //supportActionBar?.setDisplayShowHomeEnabled(true);
     }
 
     private fun testSetOfTasks(): List<TaskWithLabels> {
         val result = ArrayList<TaskWithLabels>()
         result.add(
             TaskWithLabels(
-                Task(0, "Task1","descriptu ofrebf urufb jifhbrhe ibrfh eg gthy t erhgiehfry brufhy gfurzhfyu rehfrhbey gfhrufh yugfugr ti",0, 0),
+                Task(
+                    0,
+                    "Task1",
+                    "descriptu ofrebf urufb jifhbrhe ibrfh eg gthy t erhgiehfry brufhy gfurzhfyu rehfrhbey gfhrufh yugfugr ti",
+                    0,
+                    0
+                ),
                 ArrayList()
             )
         )
         result.add(
             TaskWithLabels(
-                Task(1, "Task2","",0, 2),
+                Task(1, "Task2", "", 0, 2),
                 ArrayList()
             )
         )
         result.add(
             TaskWithLabels(
-                Task(2, "Task3","descriptu ofrebf urufb jifhbrhe ibrfh egti",2, 0),
+                Task(2, "Task3", "descriptu ofrebf urufb jifhbrhe ibrfh egti", 2, 0),
                 ArrayList()
             )
         )
         return result
     }
 
+    private fun testSetOfLabels(): List<Label> {
+        val result = ArrayList<Label>()
+        result.add(
+            Label(0, "Label 1", 0xffe57373.toInt())
+        )
+        result.add(
+            Label(0, "Home", 0xfff06292.toInt())
+        )
+        result.add(
+            Label(0, "Priority High", 0xff909090.toInt())
+        )
+        result.add(
+            Label(0, "Un truc un peu plus long pour voir quoi", 0xffffb74d.toInt())
+        )
+        return result
+    }
+
+    /**
+     * Open [ManageLabelsActivity] to mange labels
+     */
+    fun manageLabels(){
+        log("manageLabels")
+        val intent = Intent(this, ManageLabelsActivity::class.java)
+        startActivityForResult(intent, REQUEST_CODE_MANAGE_LABELS)
+    }
+
+    /**
+     * Load [Task]s from the storage
+     */
     fun loadTasks(): List<TaskWithLabels> {
+        log("loadTasks")
         return service.getAllTasksWithLabels()
     }
 
-    fun displayTasks(tasks: List<TaskWithLabels>) {
+    /**
+     * Load [Label] from the storage
+     */
+    fun loadLabels(): List<Label> {
+        log("loadLabels")
+        return ArrayList(service.getAllLabels())
+    }
+
+    /**
+     * Display the [tasks]
+     */
+    fun displayTasks(tasks: List<TaskWithLabels>, allLabels: List<Label>) {
+        log("displayTasks tasksCount=${tasks.size}, allLabelsCount=${allLabels.size}")
         val panelTasks = HashMap<Int, ArrayList<TaskWithLabels>>()
         for (panel in Constants.Panels.EVERY_PANELS)
             panelTasks[panel] = ArrayList()
@@ -84,10 +193,10 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
                 panel.add(task)
         }
 
-        panelList.tasks = panelTasks[Constants.Panels.LIST]!!
-        panelToDo.tasks = panelTasks[Constants.Panels.TODO]!!
-        panelDoing.tasks = panelTasks[Constants.Panels.DOING]!!
-        panelDone.tasks = panelTasks[Constants.Panels.DONE]!!
+        panelList.setValues(panelTasks[Constants.Panels.LIST]!!, allLabels)
+        panelToDo.setValues(panelTasks[Constants.Panels.TODO]!!, allLabels)
+        panelDoing.setValues(panelTasks[Constants.Panels.DOING]!!, allLabels)
+        panelDone.setValues(panelTasks[Constants.Panels.DONE]!!, allLabels)
         panelList.panelManager = this
         panelToDo.panelManager = this
         panelDoing.panelManager = this
@@ -95,11 +204,16 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
     }
 
     override fun moveTaskToPanel(task: TaskWithLabels, panelIndex: Int) {
-        when(panelIndex){
+        log("moveTaskToPanel task=$task, panelIndex=$panelIndex")
+        when (panelIndex) {
             Constants.Panels.LIST -> panelList.insertOnTop(task)
             Constants.Panels.TODO -> panelToDo.insertOnTop(task)
             Constants.Panels.DOING -> panelDoing.insertOnTop(task)
             Constants.Panels.DONE -> panelDone.insertOnTop(task)
         }
+    }
+
+    companion object {
+        const val REQUEST_CODE_MANAGE_LABELS = 1001
     }
 }

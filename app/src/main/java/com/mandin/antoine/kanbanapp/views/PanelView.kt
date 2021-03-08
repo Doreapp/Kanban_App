@@ -14,7 +14,8 @@ import com.mandin.antoine.kanbanapp.utils.Constants
 import kotlinx.android.synthetic.main.view_panel.view.*
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.math.log
+import com.mandin.antoine.kanbanapp.views.adapters.TaskAdapter
+import com.mandin.antoine.kanbanapp.views.view_holders.TaskTouchHelperCallback
 
 // TODO Delete doesn't work
 // TODO bug quand edit le 2e met en édition le premier
@@ -60,15 +61,16 @@ class PanelView(context: Context, attrs: AttributeSet) :
 
     private var itemTouchHelper: ItemTouchHelper? = null
 
-    var tasks: ArrayList<TaskWithLabels> = ArrayList()
-        set(value) {
-            field = ArrayList(value)
-            adapter = TaskAdapter(field, this, this)
-            val callback: ItemTouchHelper.Callback = TaskTouchHelperCallback(adapter, index)
-            itemTouchHelper = ItemTouchHelper(callback)
-            itemTouchHelper!!.attachToRecyclerView(recyclerView)
-            recyclerView.adapter = adapter
-        }
+    private var tasks: ArrayList<TaskWithLabels> = ArrayList()
+
+    fun setValues(tasks:List<TaskWithLabels>, labels:List<Label>){
+        this.tasks = ArrayList(tasks)
+        adapter = TaskAdapter(this.tasks, this, this, labels)
+        val callback: ItemTouchHelper.Callback = TaskTouchHelperCallback(adapter, index)
+        itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper!!.attachToRecyclerView(recyclerView)
+        recyclerView.adapter = adapter
+    }
 
     override fun saveTaskChanges(task: TaskWithLabels) {
         service.updateTaskWithLabels(task)
