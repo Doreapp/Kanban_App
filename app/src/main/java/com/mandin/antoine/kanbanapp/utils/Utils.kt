@@ -1,11 +1,11 @@
 package com.mandin.antoine.kanbanapp.utils
 
-import android.graphics.BlendMode
-import android.graphics.BlendModeColorFilter
-import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.view.View
 
+/**
+ * Utils functions
+ */
 object Utils {
 
     /**
