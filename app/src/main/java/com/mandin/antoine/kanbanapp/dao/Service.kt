@@ -18,7 +18,11 @@ import java.util.concurrent.Future
 import kotlin.coroutines.CoroutineContext
 
 /**
- * TODO : documentation. Function to display the whole content of the DB.
+ * TODO : Function to display the whole content of the DB.
+ * Service object, contains useful methods to access/update data base objects
+ *
+ * @see LabelDao
+ * @see TaskDao
  */
 class Service(
     context: Context
@@ -30,6 +34,10 @@ class Service(
     private val taskDao = database.taskDao()
     private val labelDao = database.labelDao()
 
+    /**
+     * Update a task with labels.
+     * Change [Task] data and links task-label([TaskLabelRelation])
+     */
     suspend fun updateTaskWithLabels(taskWithLabels: TaskWithLabels) {
         taskDao.updateTasks(taskWithLabels.task)
 
@@ -53,18 +61,30 @@ class Service(
 
     }
 
+    /**
+     * Update a [Label]
+     */
     suspend fun updateLabel(label: Label) {
         labelDao.updateLabel(label)
     }
 
+    /**
+     * Return all task with their labels
+     */
     suspend fun getAllTasksWithLabels(): List<TaskWithLabels> {
         return taskDao.getTaskWithLabels()
     }
 
+    /**
+     * Return all labels in the database
+     */
     suspend fun getAllLabels(): List<Label> {
         return labelDao.getAllLabels()
     }
 
+    /**
+     * Delete a [TaskWithLabels]
+     */
     suspend fun deleteTaskWithLabels(taskWithLabels: TaskWithLabels) {
         val relations = ArrayList<TaskLabelRelation>()
         for (label in taskWithLabels.labels)
@@ -73,12 +93,19 @@ class Service(
         taskDao.deleteTask(taskWithLabels.task)
     }
 
+    /**
+     * Delete a [Label] and all its relations to tasks ([TaskLabelRelation])
+     */
     suspend fun deleteLabel(label: Label) {
         labelDao.deleteLabelRelations(label.labelId)
 
         labelDao.deleteLabel(label)
     }
 
+    /**
+     * Insert a [TaskWithLabels] into the database.
+     * Returns its persisted value
+     */
     suspend fun insertTaskWithLabels(task: Task, labels: List<Label>): TaskWithLabels {
         taskDao.insertTasks(task)
 
@@ -96,22 +123,17 @@ class Service(
         return TaskWithLabels(task, labels)
     }
 
+    /**
+     * Insert a [Label] into the database
+     */
     suspend fun insertLabel(label: Label): Label {
         labelDao.insertLabel(label)
         return label
     }
 
-    fun clear() {
-        val callable: Callable<Void> = Callable<Void> {
-            database.clearAllTables()
-            null
-        }
-
-        val future: Future<Void> = Executors.newSingleThreadExecutor().submit(callable)
-
-        future.get()
-    }
-
+    /**
+     * Close the service and the database
+     */
     fun close() {
         database.close()
     }

@@ -6,6 +6,12 @@ import com.mandin.antoine.kanbanapp.model.Label
 import com.mandin.antoine.kanbanapp.model.Task
 import com.mandin.antoine.kanbanapp.model.TaskLabelRelation
 
+/**
+ * Room database structure : contains the DAOs
+ *
+ * @see TaskDao
+ * @see LabelDao
+ */
 @Database(entities = [Task::class, Label::class, TaskLabelRelation::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao

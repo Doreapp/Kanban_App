@@ -56,6 +56,10 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
 
     override fun onDestroy() {
         log("onDestroy")
+        panelList.onDestroy()
+        panelToDo.onDestroy()
+        panelDoing.onDestroy()
+        panelDone.onDestroy()
         service.close()
         super.onDestroy()
     }
