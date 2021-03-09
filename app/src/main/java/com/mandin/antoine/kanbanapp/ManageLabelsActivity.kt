@@ -38,6 +38,11 @@ class ManageLabelsActivity :
         initToolBar()
     }
 
+    override fun onDestroy() {
+        service.close()
+        super.onDestroy()
+    }
+
     /**
      * Called when an item of the toolbar is pressed
      */

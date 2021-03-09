@@ -79,7 +79,6 @@ class PanelView(context: Context, attrs: AttributeSet) :
         service.updateTaskWithLabels(task)
     }
 
-
     override fun createNewTask(
         title: String, description: String,
         labels: List<Label>, priority: Int
@@ -118,6 +117,10 @@ class PanelView(context: Context, attrs: AttributeSet) :
             return true
         }
         return false
+    }
+
+    fun onDestroy(){
+        service.close()
     }
 
     fun displayNewTask() {

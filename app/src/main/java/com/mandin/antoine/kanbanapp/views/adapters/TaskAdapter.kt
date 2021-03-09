@@ -14,7 +14,9 @@ import com.mandin.antoine.kanbanapp.views.view_holders.TaskViewHolder
 import com.mandin.antoine.kanbanapp.views.view_holders.TaskViewHolderObserver
 
 /**
- * Adapter displaying task views
+ * Adapter displaying task views.
+ *
+ * TODO introduce tow View Type and separate te view holders.
  */
 class TaskAdapter
     (
