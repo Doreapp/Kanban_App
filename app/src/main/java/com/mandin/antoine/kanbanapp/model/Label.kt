@@ -10,7 +10,8 @@ import androidx.room.PrimaryKey
  */
 @Entity
 data class Label(
-    @PrimaryKey(autoGenerate = true) val labelId: Int = 0,
+    @PrimaryKey(autoGenerate = true)
+    var labelId: Int = 0,
     var title:String,
     var color: Int
 )

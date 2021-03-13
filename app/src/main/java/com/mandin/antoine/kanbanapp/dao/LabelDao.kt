@@ -26,7 +26,7 @@ interface LabelDao {
      * Insert a new label and update its [Label.labelId]
      */
     @Insert
-    suspend fun insertLabel(vararg labels: Label)
+    suspend fun insertLabel(label: Label) : Long
 
     /**
      * Delete a [Label]

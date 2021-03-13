@@ -17,7 +17,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.activity_manage_labels.*
 import kotlinx.coroutines.runBlocking
+import java.util.*
 import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 // TODO retrieve labels when come back from mangeLabelsActivity, and update the display
 /**
@@ -198,13 +201,17 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
         for (panel in Constants.Panels.EVERY_PANELS)
             panelTasks[panel] = ArrayList()
 
+        val setOfIds = TreeSet<Int>()
         for (task in tasks) {
             val panel = panelTasks[task.task.panel]
+            setOfIds.add(task.task.taskId)
             if (panel == null)
                 e("Panel is not in the list (${task.task.panel}). Task=$task")
             else
                 panel.add(task)
         }
+
+        log("displayTask. setOfIds=${setOfIds.joinToString()}")
 
         panelList.setValues(panelTasks[Constants.Panels.LIST]!!, allLabels)
         panelToDo.setValues(panelTasks[Constants.Panels.TODO]!!, allLabels)

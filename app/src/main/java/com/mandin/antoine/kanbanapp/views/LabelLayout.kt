@@ -109,6 +109,7 @@ class LabelLayout(context: Context, attrs: AttributeSet) :
         else
             (selectedLabels as ArrayList).remove(label)
 
-        views[label]?.visibility = if (selected || editing) VISIBLE else GONE
+        updateDisplay()
+        //views[label]?.visibility = if (selected || editing) VISIBLE else GONE
     }
 }

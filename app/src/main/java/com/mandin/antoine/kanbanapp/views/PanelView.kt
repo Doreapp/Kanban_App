@@ -17,11 +17,7 @@ import com.mandin.antoine.kanbanapp.views.adapters.TaskAdapter
 import com.mandin.antoine.kanbanapp.views.view_holders.TaskTouchHelperCallback
 import kotlinx.android.synthetic.main.view_panel.view.*
 import kotlinx.coroutines.runBlocking
-import java.util.concurrent.Executors
 
-// TODO Delete doesn't work
-// TODO bug quand edit le 2e met en édition le premier
-// TODO Focus l'edit text au start de l'ajout ou de la modif + scroll to it
 class PanelView(context: Context, attrs: AttributeSet) :
     LinearLayout(context, attrs), TaskAdapter.ModificationSaver,
     TaskTouchHelperCallback.OnStartDragListener {
@@ -73,6 +69,11 @@ class PanelView(context: Context, attrs: AttributeSet) :
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper!!.attachToRecyclerView(recyclerView)
         recyclerView.adapter = adapter
+    }
+
+    override fun savePrioritiesChanges(tasks: Array<Task>) = runBlocking {
+        log("save priorities changes of ${tasks.joinToString()}.")
+        service.updateTasks(tasks)
     }
 
     override fun saveTaskChanges(task: TaskWithLabels) = runBlocking {
