@@ -152,7 +152,7 @@ class TaskAdapter
         viewHolder.onItemClear()
     }
 
-    override fun onItemSwiped(viewHolder: TaskViewHolder.DisplayViewHolder, direction: Int) {
+    override fun onItemSwiped(viewHolder: TaskViewHolder.DisplayViewHolder, direction: Int){
         log("onItemSwiped viewHolder=$viewHolder, direction=$direction")
         when (direction) {
             ItemTouchHelper.END -> moveTaskRight(viewHolder)
@@ -161,6 +161,10 @@ class TaskAdapter
     }
 
     override fun startSwipingTask(taskViewHolder: TaskViewHolder.DisplayViewHolder) {
+        if (editingItem >= 0) {
+            log("startSwipingTask, try to move items while editing : abort")
+            return
+        }
         log("startSwipingTask taskViewHolder=$taskViewHolder")
         taskViewHolder.onItemSelected()
         startDragListener.onStartSwipe(taskViewHolder)

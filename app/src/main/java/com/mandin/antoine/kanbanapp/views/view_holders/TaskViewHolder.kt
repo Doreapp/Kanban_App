@@ -159,7 +159,7 @@ abstract class TaskViewHolder(
          * If [newTask] is null, then the view holder represent a new task, not persisted in the database yet
          */
         override fun update(newTask: TaskWithLabels?) {
-            if (newTask == task) {
+            if (newTask == task && newTask !== null) {
                 log("update() position=$adapterPosition, task stays the same")
                 //return
             } else {

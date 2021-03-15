@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.R
@@ -99,8 +100,11 @@ class PanelView(context: Context, attrs: AttributeSet) :
     }
 
     override fun moveTaskRight(task: TaskWithLabels): Boolean {
-        if (index == Constants.Panels.DONE)
-            return false
+        if (index == Constants.Panels.DONE) {
+            deleteTask(task)
+            Toast.makeText(context, "Task '${task.task.title}' deleted.", Toast.LENGTH_SHORT).show()
+            return true
+        }
 
         panelManager?.let {
             it.moveTaskToPanel(task, index + 1)

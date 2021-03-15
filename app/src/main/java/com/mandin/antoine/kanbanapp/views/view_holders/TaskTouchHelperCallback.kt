@@ -27,7 +27,7 @@ class TaskTouchHelperCallback(
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
         val swipeFlags = when (panelIndex) {
             Constants.Panels.LIST -> ItemTouchHelper.END
-            Constants.Panels.DONE -> ItemTouchHelper.START
+            //Constants.Panels.DONE -> ItemTouchHelper.START
             else -> ItemTouchHelper.END or ItemTouchHelper.START
 
         }
