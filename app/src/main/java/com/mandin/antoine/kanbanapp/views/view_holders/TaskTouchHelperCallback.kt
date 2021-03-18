@@ -12,7 +12,8 @@ class TaskTouchHelperCallback(
 ) : ItemTouchHelper.Callback() {
 
     private fun log(str: String) {
-        Log.i("TaskTouchHelperCallback", str)
+        if (Constants.DEBUG)
+            Log.i("TaskTouchHelperCallback", str)
     }
 
     override fun isItemViewSwipeEnabled(): Boolean {
@@ -27,7 +28,7 @@ class TaskTouchHelperCallback(
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
         val swipeFlags = when (panelIndex) {
             Constants.Panels.LIST -> ItemTouchHelper.END
-            Constants.Panels.DONE -> ItemTouchHelper.START
+            //Constants.Panels.DONE -> ItemTouchHelper.START
             else -> ItemTouchHelper.END or ItemTouchHelper.START
 
         }
@@ -42,15 +43,14 @@ class TaskTouchHelperCallback(
         log("onMove")
         if (viewHolder is ItemTouchHelperViewHolder)
             viewHolder.onItemClear()
-        adapter.onItemMove(viewHolder as TaskViewHolder, target.adapterPosition)
-        return true
+        return adapter.onItemMove(viewHolder as TaskViewHolder.DisplayViewHolder, target.adapterPosition)
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         log("onSwiped")
         if (viewHolder is ItemTouchHelperViewHolder)
             viewHolder.onItemClear()
-        adapter.onItemSwiped(viewHolder as TaskViewHolder, direction)
+        adapter.onItemSwiped(viewHolder as TaskViewHolder.DisplayViewHolder, direction)
     }
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
@@ -65,12 +65,13 @@ class TaskTouchHelperCallback(
     }
 
     interface TaskTouchHelperAdapter {
-        fun onItemMove(viewHolder: TaskViewHolder, toPosition: Int): Boolean
+        fun onItemMove(viewHolder: TaskViewHolder.DisplayViewHolder, toPosition: Int): Boolean
 
-        fun onItemDismiss(viewHolder: TaskViewHolder)
+        fun onItemDismiss(viewHolder: TaskViewHolder.DisplayViewHolder)
 
-        fun onItemSwiped(viewHolder: TaskViewHolder, direction: Int)
+        fun onItemSwiped(viewHolder: TaskViewHolder.DisplayViewHolder, direction: Int)
     }
+
 
     interface ItemTouchHelperViewHolder {
         fun onItemSelected()

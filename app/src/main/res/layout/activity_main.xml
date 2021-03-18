@@ -35,28 +35,28 @@
                     android:layout_height="match_parent"
                     android:id="@+id/panelList"
                     app:index="0"
-                    app:title="List"/>
+                    app:title="@string/list"/>
 
             <com.mandin.antoine.kanbanapp.views.PanelView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/panelToDo"
                     app:index="1"
-                    app:title="To Do"/>
+                    app:title="@string/to_do"/>
 
             <com.mandin.antoine.kanbanapp.views.PanelView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/panelDoing"
                     app:index="2"
-                    app:title="Doing"/>
+                    app:title="@string/doing"/>
 
             <com.mandin.antoine.kanbanapp.views.PanelView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/panelDone"
                     app:index="3"
-                    app:title="Done"/>
+                    app:title="@string/done"/>
         </LinearLayout>
     </HorizontalScrollView>
 

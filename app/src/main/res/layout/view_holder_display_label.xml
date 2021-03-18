@@ -11,7 +11,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/labelView"
-            android:text="Test Label"
+            android:text=""
             android:layout_gravity="center_vertical|start"/>
 
     <View android:layout_width="0dp"

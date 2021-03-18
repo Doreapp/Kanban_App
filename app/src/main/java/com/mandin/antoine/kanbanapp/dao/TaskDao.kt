@@ -40,7 +40,7 @@ interface TaskDao {
      * Insert some [Task]
      */
     @Insert
-    suspend fun insertTasks(vararg tasks: Task)
+    suspend fun insertTask(task: Task) : Long
 
     /**
      * Delete a [Task]
@@ -49,8 +49,17 @@ interface TaskDao {
     suspend fun deleteTask(task: Task)
 
     /**
-     * Update some [Task]
+     * Update a [Task]
      */
     @Update
-    suspend fun updateTasks(vararg task: Task)
+    suspend fun updateTask(task: Task)
+
+    /**
+     * Update some [Task]s
+     */
+    @Update
+    suspend fun updateTasks(task: Array<Task>)
+
+    @Query("DELETE FROM TaskLabelRelation WHERE 1=1")
+    suspend fun deleteTaskLabelRelations()
 }

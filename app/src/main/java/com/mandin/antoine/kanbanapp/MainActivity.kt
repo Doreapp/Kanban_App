@@ -14,12 +14,12 @@ import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 import com.mandin.antoine.kanbanapp.utils.Constants
 import com.mandin.antoine.kanbanapp.views.PanelView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.toolbar
-import kotlinx.android.synthetic.main.activity_manage_labels.*
 import kotlinx.coroutines.runBlocking
+import java.util.*
 import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
-// TODO retrieve labels when come back from mangeLabelsActivity, and update the display
 /**
  * Main Activity : used to manage tasks, into [PanelView]s
  *
@@ -29,11 +29,13 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
     lateinit var service: Service
 
     private fun log(str: String) {
-        Log.i("MainActivity", str)
+        if (Constants.DEBUG)
+            Log.i("MainActivity", str)
     }
 
     private fun e(str: String) {
-        Log.e("MainActivity", str, Throwable())
+        if (Constants.DEBUG)
+            Log.e("MainActivity", str, Throwable())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
         //Hide the keyboard usually opening on app begin
         window.setSoftInputMode(
             WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-        );
+        )
 
         fetchAndDisplayData()
 
@@ -69,7 +71,7 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         log("onOptionsItemSelected item=$item")
-        when(item.itemId){
+        when (item.itemId) {
             R.id.item_manage_labels -> {
                 // open ManageLabelsActivity
                 manageLabels()
@@ -90,14 +92,14 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         log("onActivityResult requestCode=$requestCode, resultCode=$requestCode, data=$data")
         super.onActivityResult(requestCode, resultCode, data)
-        when(requestCode){
+        when (requestCode) {
             REQUEST_CODE_MANAGE_LABELS -> {
                 fetchAndDisplayData()
             }
         }
     }
 
-    private fun fetchAndDisplayData(){
+    private fun fetchAndDisplayData() {
         Executors.newSingleThreadExecutor().submit {
             runBlocking {
                 val tasks = loadTasks()
@@ -111,7 +113,7 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
     /**
      * Init the toolbar, and the back arrow on it
      */
-    private fun initToolBar(){
+    private fun initToolBar() {
         log("initToolBar")
         setSupportActionBar(toolbar)
         //supportActionBar?.setDisplayHomeAsUpEnabled(true);
@@ -167,7 +169,7 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
     /**
      * Open [ManageLabelsActivity] to mange labels
      */
-    fun manageLabels(){
+    fun manageLabels() {
         log("manageLabels")
         val intent = Intent(this, ManageLabelsActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_MANAGE_LABELS)
@@ -198,13 +200,17 @@ class MainActivity : AppCompatActivity(), PanelView.PanelManager {
         for (panel in Constants.Panels.EVERY_PANELS)
             panelTasks[panel] = ArrayList()
 
+        val setOfIds = TreeSet<Int>()
         for (task in tasks) {
             val panel = panelTasks[task.task.panel]
+            setOfIds.add(task.task.taskId)
             if (panel == null)
                 e("Panel is not in the list (${task.task.panel}). Task=$task")
             else
                 panel.add(task)
         }
+
+        log("displayTask. setOfIds=${setOfIds.joinToString()}")
 
         panelList.setValues(panelTasks[Constants.Panels.LIST]!!, allLabels)
         panelToDo.setValues(panelTasks[Constants.Panels.TODO]!!, allLabels)

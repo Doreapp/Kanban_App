@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.R
@@ -17,11 +18,7 @@ import com.mandin.antoine.kanbanapp.views.adapters.TaskAdapter
 import com.mandin.antoine.kanbanapp.views.view_holders.TaskTouchHelperCallback
 import kotlinx.android.synthetic.main.view_panel.view.*
 import kotlinx.coroutines.runBlocking
-import java.util.concurrent.Executors
 
-// TODO Delete doesn't work
-// TODO bug quand edit le 2e met en édition le premier
-// TODO Focus l'edit text au start de l'ajout ou de la modif + scroll to it
 class PanelView(context: Context, attrs: AttributeSet) :
     LinearLayout(context, attrs), TaskAdapter.ModificationSaver,
     TaskTouchHelperCallback.OnStartDragListener {
@@ -32,7 +29,8 @@ class PanelView(context: Context, attrs: AttributeSet) :
     var panelManager: PanelManager? = null
 
     private fun log(str: String) {
-        Log.i("PanelView", str)
+        if (Constants.DEBUG)
+            Log.i("PanelView", str)
     }
 
     init {
@@ -75,6 +73,11 @@ class PanelView(context: Context, attrs: AttributeSet) :
         recyclerView.adapter = adapter
     }
 
+    override fun savePrioritiesChanges(tasks: Array<Task>) = runBlocking {
+        log("save priorities changes of ${tasks.joinToString()}.")
+        service.updateTasks(tasks)
+    }
+
     override fun saveTaskChanges(task: TaskWithLabels) = runBlocking {
         service.updateTaskWithLabels(task)
     }
@@ -98,8 +101,13 @@ class PanelView(context: Context, attrs: AttributeSet) :
     }
 
     override fun moveTaskRight(task: TaskWithLabels): Boolean {
-        if (index == Constants.Panels.DONE)
-            return false
+        if (index == Constants.Panels.DONE) {
+            deleteTask(task)
+
+            val toastText = context.getString(R.string.task_x_deleted, task.task.title)
+            Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
+            return true
+        }
 
         panelManager?.let {
             it.moveTaskToPanel(task, index + 1)
@@ -119,7 +127,7 @@ class PanelView(context: Context, attrs: AttributeSet) :
         return false
     }
 
-    fun onDestroy(){
+    fun onDestroy() {
         service.close()
     }
 

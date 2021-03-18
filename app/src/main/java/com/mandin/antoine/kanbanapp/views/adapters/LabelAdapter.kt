@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.R
 import com.mandin.antoine.kanbanapp.model.Label
-import com.mandin.antoine.kanbanapp.model.TaskWithLabels
+import com.mandin.antoine.kanbanapp.utils.Constants
 import com.mandin.antoine.kanbanapp.views.view_holders.LabelViewHolder
 
 /**
@@ -35,7 +35,8 @@ class LabelAdapter(
     private var creating = false
 
     private fun log(str: String) {
-        Log.i("LabelAdapter", str)
+        if (Constants.DEBUG)
+            Log.i("LabelAdapter", str)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LabelViewHolder {
@@ -54,11 +55,11 @@ class LabelAdapter(
     }
 
     override fun onBindViewHolder(holder: LabelViewHolder, position: Int) {
-        if(creating && position == editingItemPosition){
+        if (creating && position == editingItemPosition) {
             holder.update(null)
         } else {
             holder.update(
-                labels[position + if(creating) 1 else 0]
+                labels[position + if (creating) 1 else 0]
             )
         }
     }
@@ -100,7 +101,7 @@ class LabelAdapter(
     override fun onSaveChanges(label: Label?, title: String, color: Int) {
         log("onSaveChanges(label=$label, title=$title, color=$color, editingItemPosition=$editingItemPosition, creating=$creating)")
 
-        if(creating){
+        if (creating) {
             val nLabel = modificationSaver.createNewLabel(title, color)
             labels.add(0, nLabel)
             creating = false
@@ -126,7 +127,7 @@ class LabelAdapter(
      */
     override fun onCancelChanges(label: Label?) {
         log("onCancelChanges(label=$label, editingItemPosition=$editingItemPosition, creating=$creating)")
-        if(creating) {
+        if (creating) {
             // We were creating a new item
             creating = false
             editingItemPosition = -1

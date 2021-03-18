@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
 
+        <!-- TODO : widget that work
         <receiver android:name=".views.PanelAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -28,6 +29,10 @@
                     android:name="android.appwidget.provider"
                     android:resource="@xml/panel_appwidget_info"/>
         </receiver>
+
+        <service android:name=".PanelWidgetService"
+                 android:permission="android.permission.BIND_REMOTEVIEWS"
+                 android:exported="false" /> -->
     </application>
 
 </manifest>

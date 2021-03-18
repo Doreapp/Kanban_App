@@ -7,12 +7,12 @@ import com.mandin.antoine.kanbanapp.model.Label
  * Listener of task edit end
  */
 interface TaskViewHolderObserver {
-    fun startSwipingTask(taskViewHolder: TaskViewHolder)
-    fun startReorderingTask(taskViewHolder: TaskViewHolder)
-    fun startEditingTask(taskViewHolder: TaskViewHolder)
-    fun cancelTaskEdition(taskViewHolder: TaskViewHolder)
-    fun saveTaskEdition(taskViewHolder: TaskViewHolder, title: String, description: String, labels: List<Label>)
-    fun removeTask(taskViewHolder: TaskViewHolder)
-    fun moveTaskRight(taskViewHolder: TaskViewHolder)
-    fun moveTaskLeft(taskViewHolder: TaskViewHolder)
+    fun startSwipingTask(taskViewHolder: TaskViewHolder.DisplayViewHolder)
+    fun startReorderingTask(taskViewHolder: TaskViewHolder.DisplayViewHolder)
+    fun startEditingTask(taskViewHolder: TaskViewHolder.DisplayViewHolder)
+    fun cancelTaskEdition(taskViewHolder: TaskViewHolder.EditViewHolder)
+    fun saveTaskEdition(taskViewHolder: TaskViewHolder.EditViewHolder, title: String, description: String, labels: List<Label>)
+    fun removeTask(taskViewHolder: TaskViewHolder.EditViewHolder)
+    fun moveTaskRight(taskViewHolder: TaskViewHolder.DisplayViewHolder)
+    fun moveTaskLeft(taskViewHolder: TaskViewHolder.DisplayViewHolder)
 }

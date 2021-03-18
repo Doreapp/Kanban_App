@@ -7,14 +7,16 @@
               android:background="@drawable/inset_panel"
               android:layout_height="match_parent">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
                   android:orientation="horizontal"
-    android:paddingHorizontal="10dp"
-    android:paddingVertical="5dp">
+                  android:paddingHorizontal="10dp"
+                  android:paddingVertical="5dp">
+
         <TextView android:layout_width="0dp"
                   android:layout_weight="1"
                   android:layout_height="wrap_content"
-                  android:text="title"
+                  android:text=""
                   android:textStyle="bold"
                   android:textSize="20sp"
                   android:textColor="@android:color/black"
@@ -34,7 +36,7 @@
             android:id="@+id/recyclerView"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:padding="5dp"
-            tools:listitem="@layout/view_task"
+            tools:listitem="@layout/view_holder_display_task"
     />
 
 </LinearLayout>

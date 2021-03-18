@@ -2,7 +2,6 @@ package com.mandin.antoine.kanbanapp.dao
 
 import androidx.room.*
 import com.mandin.antoine.kanbanapp.model.Label
-import com.mandin.antoine.kanbanapp.model.Task
 
 /**
  * Data Access Object used to access/update Label objects into the database
@@ -26,7 +25,7 @@ interface LabelDao {
      * Insert a new label and update its [Label.labelId]
      */
     @Insert
-    suspend fun insertLabel(vararg labels: Label)
+    suspend fun insertLabel(label: Label) : Long
 
     /**
      * Delete a [Label]
