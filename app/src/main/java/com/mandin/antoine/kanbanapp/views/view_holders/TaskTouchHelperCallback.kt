@@ -12,7 +12,8 @@ class TaskTouchHelperCallback(
 ) : ItemTouchHelper.Callback() {
 
     private fun log(str: String) {
-        Log.i("TaskTouchHelperCallba1", str)
+        if (Constants.DEBUG)
+            Log.i("TaskTouchHelperCallback", str)
     }
 
     override fun isItemViewSwipeEnabled(): Boolean {

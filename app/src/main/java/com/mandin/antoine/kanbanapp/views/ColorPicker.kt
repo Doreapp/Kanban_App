@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import com.mandin.antoine.kanbanapp.R
+import com.mandin.antoine.kanbanapp.utils.Constants
 
 /**
  * View allowing to choose a color into the array of color [R.array.labelColors]
@@ -39,6 +40,11 @@ class ColorPicker(context: Context, attrs: AttributeSet) : LinearLayout(context,
         get() {
             return if (pickedColorIndex >= 0) colors[pickedColorIndex] else -1
         }
+
+    fun log(str:String){
+        if(Constants.DEBUG)
+            Log.i("ColorPicker",str)
+    }
 
     init {
         orientation = HORIZONTAL
@@ -74,7 +80,7 @@ class ColorPicker(context: Context, attrs: AttributeSet) : LinearLayout(context,
      * If may be by an user action (click on [ColorView]) or programmatically by [selectColor].
      */
     private fun onPicked(view: ColorView) {
-        Log.i("ColorPicker", "onPicked : $view, listener=$listener")
+        log( "onPicked : $view, listener=$listener")
         if (pickedColorIndex >= 0)
             colorViews[pickedColorIndex].unSelect()
         view.select()
@@ -90,10 +96,15 @@ class ColorPicker(context: Context, attrs: AttributeSet) : LinearLayout(context,
         context: Context,
         val color: Int
     ) : View(context) {
+        fun log(str:String){
+            if(Constants.DEBUG)
+                Log.i("ColorView",str)
+        }
+
         init {
-            Log.i("ColorView", "<init>")
+            log("<init>")
             setBackgroundColor(color)
-            val lp = LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1f)
+            val lp = LayoutParams(0, LayoutParams.MATCH_PARENT, 1f)
             lp.setMargins(1, 0, 1, 0)
             layoutParams = lp
         }
@@ -102,16 +113,16 @@ class ColorPicker(context: Context, attrs: AttributeSet) : LinearLayout(context,
          * Select the view : scale it *2
          */
         fun select() {
-            Log.i("ColorView", "select")
-            (layoutParams as LinearLayout.LayoutParams).weight = 2f
+            log("select")
+            (layoutParams as LayoutParams).weight = 2f
         }
 
         /**
          * Un-Select the view : reset it scale to normal
          */
         fun unSelect() {
-            Log.i("ColorView", "unSelect")
-            (layoutParams as LinearLayout.LayoutParams).weight = 1f
+            log( "unSelect")
+            (layoutParams as LayoutParams).weight = 1f
         }
 
         override fun toString(): String {

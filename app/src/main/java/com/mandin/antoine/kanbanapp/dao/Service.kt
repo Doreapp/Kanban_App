@@ -1,23 +1,13 @@
 package com.mandin.antoine.kanbanapp.dao
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
 import com.mandin.antoine.kanbanapp.model.Label
 import com.mandin.antoine.kanbanapp.model.Task
 import com.mandin.antoine.kanbanapp.model.TaskLabelRelation
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
 import com.mandin.antoine.kanbanapp.utils.Constants
-import android.service.autofill.UserData
-
-import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.lang.Exception
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
-import kotlin.coroutines.CoroutineContext
 
 /**
  * TODO : Function to display the whole content of the DB.
@@ -36,8 +26,9 @@ class Service(
     private val taskDao = database.taskDao()
     private val labelDao = database.labelDao()
 
-    private fun log(str:String){
-        Log.i("Service",str)
+    private fun log(str: String) {
+        if (Constants.DEBUG)
+            Log.i("Service", str)
     }
 
     /**
@@ -70,7 +61,7 @@ class Service(
     /**
      * Update some [Task]s
      */
-    suspend fun updateTasks(tasks: Array<Task>){
+    suspend fun updateTasks(tasks: Array<Task>) {
         taskDao.updateTasks(tasks)
     }
 
@@ -158,7 +149,7 @@ class Service(
         database.close()
     }
 
-    suspend fun clearLabelsRelations(){
+    suspend fun clearLabelsRelations() {
         taskDao.deleteTaskLabelRelations()
     }
 }

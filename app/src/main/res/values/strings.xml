@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Kanban App</string>
+
+    <!-- Panel names -->
+    <string name="to_do">To Do</string>
+    <string name="list">List</string>
+    <string name="doing">Doing</string>
+    <string name="done">Done</string>
+
+    <!-- Useful words -->
+    <string name="empty">Empty</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+
+    <!-- Actions -->
+    <string name="manage_labels">Manage Labels</string>
+    <string name="new_label">New Label</string>
+
+    <!-- Information -->
+    <string name="task_x_deleted">Task %s deleted.</string>
+
+    <!-- Others -->
 </resources>

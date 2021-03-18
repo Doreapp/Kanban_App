@@ -4,11 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import com.google.android.flexbox.FlexDirection.ROW
 import com.google.android.flexbox.FlexWrap.WRAP
 import com.google.android.flexbox.FlexboxLayout
 import com.mandin.antoine.kanbanapp.model.Label
+import com.mandin.antoine.kanbanapp.utils.Constants
 
 /**
  * Layout display labels following one-another.
@@ -33,7 +33,7 @@ class LabelLayout(context: Context, attrs: AttributeSet) :
             removeAllViews()
             value?.let {
                 val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-                params.setMargins(4,2,4,2)
+                params.setMargins(4, 2, 4, 2)
                 for (label in value) {
                     val view = LabelView(context)
                     view.label = label
@@ -48,8 +48,7 @@ class LabelLayout(context: Context, attrs: AttributeSet) :
 
     /**
      * Currently selected labels.
-     * Unselected labels are hidden if [showOnlySelectedLabels], otherwise their shown
-     * as unselected.
+     * Unselected labels are shown only if [editing] is true
      */
     var selectedLabels: List<Label>? = null
         set(value) {
@@ -68,7 +67,8 @@ class LabelLayout(context: Context, attrs: AttributeSet) :
         }
 
     private fun log(str: String) {
-        Log.i("LabelLayout", str)
+        if (Constants.DEBUG)
+            Log.i("LabelLayout", str)
     }
 
     init {

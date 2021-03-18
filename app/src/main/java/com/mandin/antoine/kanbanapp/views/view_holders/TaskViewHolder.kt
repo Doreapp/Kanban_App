@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.model.Label
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
+import com.mandin.antoine.kanbanapp.utils.Constants
 import kotlinx.android.synthetic.main.view_holder_display_task.view.*
 import kotlinx.android.synthetic.main.view_holder_display_task.view.layoutLabels
 import kotlinx.android.synthetic.main.view_holder_edit_task.view.*
@@ -22,7 +23,8 @@ abstract class TaskViewHolder(
     var task: TaskWithLabels? = null
 
     protected fun log(str: String) {
-        Log.i("TaskViewHolder", str)
+        if (Constants.DEBUG)
+            Log.i("TaskViewHolder", str)
     }
 
     open fun update(newTask: TaskWithLabels?) {
@@ -97,7 +99,6 @@ abstract class TaskViewHolder(
 
         /**
          * Start editing the task
-         * should be call only when [editing] is false
          */
         fun edit() {
             log("edit(). task=$task")
@@ -106,7 +107,6 @@ abstract class TaskViewHolder(
 
         /**
          * Start reordering the task
-         * should be call only when [editing] is false
          */
         fun startReordering() {
             log("startReordering(). task=$task")
@@ -115,7 +115,6 @@ abstract class TaskViewHolder(
 
         /**
          * Start swiping the task holder
-         * should be call only when [editing] is false
          */
         fun startSwiping() {
             log("startSwiping(). task=$task")

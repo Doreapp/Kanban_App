@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.mandin.antoine.kanbanapp.model.Label
+import com.mandin.antoine.kanbanapp.utils.Constants
 import com.mandin.antoine.kanbanapp.utils.Utils
 import com.mandin.antoine.kanbanapp.views.ColorPicker
 import kotlinx.android.synthetic.main.view_holder_display_label.view.*
@@ -24,7 +25,8 @@ abstract class LabelViewHolder(
 
 
     protected fun log(str: String) {
-        Log.i("LabelViewHolder", str)
+        if (Constants.DEBUG)
+            Log.i("LabelViewHolder", str)
     }
 
     /**
@@ -97,7 +99,6 @@ abstract class LabelViewHolder(
             listener.onCancelChanges(label)
         }
 
-
         /**
          * Called on click on "save" button
          */
@@ -108,7 +109,6 @@ abstract class LabelViewHolder(
                 itemView.colorPicker.pickedColor
             )
         }
-
 
         /**
          * Called on click on "delete" button

@@ -4,23 +4,36 @@
               android:layout_width="match_parent"
               android:id="@+id/mainLayout"
               android:background="@drawable/inset_panel"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              tools:listitem="@layout/view_task"
+              tools:listitem="@layout/view_task_widget"
               android:paddingHorizontal="10dp"
               android:paddingVertical="5dp"
               android:layout_height="match_parent">
 
     <TextView android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:text="TODO ... "
+              android:text="@string/to_do"
               android:textStyle="bold"
+              android:layout_marginBottom="10dp"
               android:textSize="20sp"
               android:textColor="@android:color/black"
               android:id="@+id/tvTitle"/>
 
-    <ListView android:layout_width="match_parent" android:layout_height="0dp"
+    <ListView android:layout_width="match_parent"
+              android:layout_height="0dp"
               android:layout_weight="1"
+              android:id="@+id/listView"
+              android:dividerHeight="0dp"
+              android:divider="@null"
               android:background="@drawable/inset_panel"
-              tools:listitem="@layout/view_task"/>
+              tools:listitem="@layout/view_task_widget"/>
+
+    <TextView
+            android:id="@+id/emptyView"
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_weight="1"
+              android:gravity="center"
+              android:text="@string/empty"
+              android:textSize="20sp" />
 
 </LinearLayout>

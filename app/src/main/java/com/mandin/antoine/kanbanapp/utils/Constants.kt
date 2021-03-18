@@ -4,6 +4,12 @@ package com.mandin.antoine.kanbanapp.utils
  * Object containing Project constants
  */
 object Constants {
+
+    /**
+     * Are we currently debugging
+     */
+    const val DEBUG = true
+
     /**
      * Name of the database
      */

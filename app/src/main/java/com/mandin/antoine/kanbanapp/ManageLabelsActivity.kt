@@ -73,8 +73,8 @@ class ManageLabelsActivity :
      */
     private fun initToolBar() {
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     /**

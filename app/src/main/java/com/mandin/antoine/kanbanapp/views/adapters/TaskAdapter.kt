@@ -10,12 +10,11 @@ import com.mandin.antoine.kanbanapp.R
 import com.mandin.antoine.kanbanapp.model.Label
 import com.mandin.antoine.kanbanapp.model.Task
 import com.mandin.antoine.kanbanapp.model.TaskWithLabels
+import com.mandin.antoine.kanbanapp.utils.Constants
 import com.mandin.antoine.kanbanapp.views.view_holders.*
 
 /**
  * Adapter displaying task views.
- *
- * TODO introduce tow View Type and separate te view holders.
  */
 class TaskAdapter
     (
@@ -39,7 +38,8 @@ class TaskAdapter
     private var newOne = false
 
     private fun log(str: String) {
-        Log.i("TaskAdapter", str)
+        if (Constants.DEBUG)
+            Log.i("TaskAdapter", str)
     }
 
     init {
@@ -152,7 +152,7 @@ class TaskAdapter
         viewHolder.onItemClear()
     }
 
-    override fun onItemSwiped(viewHolder: TaskViewHolder.DisplayViewHolder, direction: Int){
+    override fun onItemSwiped(viewHolder: TaskViewHolder.DisplayViewHolder, direction: Int) {
         log("onItemSwiped viewHolder=$viewHolder, direction=$direction")
         when (direction) {
             ItemTouchHelper.END -> moveTaskRight(viewHolder)

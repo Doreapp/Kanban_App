@@ -29,7 +29,8 @@ class PanelView(context: Context, attrs: AttributeSet) :
     var panelManager: PanelManager? = null
 
     private fun log(str: String) {
-        Log.i("PanelView", str)
+        if (Constants.DEBUG)
+            Log.i("PanelView", str)
     }
 
     init {
@@ -102,7 +103,9 @@ class PanelView(context: Context, attrs: AttributeSet) :
     override fun moveTaskRight(task: TaskWithLabels): Boolean {
         if (index == Constants.Panels.DONE) {
             deleteTask(task)
-            Toast.makeText(context, "Task '${task.task.title}' deleted.", Toast.LENGTH_SHORT).show()
+
+            val toastText = context.getString(R.string.task_x_deleted, task.task.title)
+            Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
             return true
         }
 
@@ -124,7 +127,7 @@ class PanelView(context: Context, attrs: AttributeSet) :
         return false
     }
 
-    fun onDestroy(){
+    fun onDestroy() {
         service.close()
     }
 

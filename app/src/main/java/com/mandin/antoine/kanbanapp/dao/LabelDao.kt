@@ -2,7 +2,6 @@ package com.mandin.antoine.kanbanapp.dao
 
 import androidx.room.*
 import com.mandin.antoine.kanbanapp.model.Label
-import com.mandin.antoine.kanbanapp.model.Task
 
 /**
  * Data Access Object used to access/update Label objects into the database

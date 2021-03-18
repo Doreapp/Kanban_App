@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import com.mandin.antoine.kanbanapp.R
 import com.mandin.antoine.kanbanapp.model.Label
+import com.mandin.antoine.kanbanapp.utils.Constants
 import com.mandin.antoine.kanbanapp.utils.Utils
 
 /**
@@ -22,7 +23,7 @@ class LabelView(context: Context, attributeSet: AttributeSet?) :
     var label: Label? = null
         set(value) {
             field = value
-            if(value === null){
+            if (value === null) {
                 Utils.changeBackgroundColor(this, Color.TRANSPARENT)
                 text = ""
             } else {
@@ -36,17 +37,18 @@ class LabelView(context: Context, attributeSet: AttributeSet?) :
 
 
     override fun setSelected(selected: Boolean) {
-        if(label === null){
+        if (label === null) {
             super.setSelected(false)
             return
         }
-        Utils.changeBackgroundColor(this, if(selected) label!!.color else Color.LTGRAY )
+        Utils.changeBackgroundColor(this, if (selected) label!!.color else Color.LTGRAY)
         super.setSelected(selected)
     }
 
 
-    private fun log(str: String){
-        Log.i("LabelView", str)
+    private fun log(str: String) {
+        if (Constants.DEBUG)
+            Log.i("LabelView", str)
     }
 
     init {
@@ -67,7 +69,7 @@ class LabelView(context: Context, attributeSet: AttributeSet?) :
         log("onClick")
         val beforeSelected = isSelected
         isSelected = !isSelected
-        if(beforeSelected != isSelected && label !== null)
+        if (beforeSelected != isSelected && label !== null)
             onLabelSelectionChange?.onLabelSelectionChange(label!!, isSelected)
     }
 
